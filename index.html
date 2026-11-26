@@ -133,7 +133,6 @@ body.cvon .fab{display:none}#p-canvas.cvfs .cvdock{position:static;margin:8px 0 
 .cvg.v{left:50%;top:0;height:100%;border-left:calc(1px/var(--z,1)) dashed #e0457b;opacity:.35}.cvg.h{top:50%;left:0;width:100%;border-top:calc(1px/var(--z,1)) dashed #e0457b;opacity:.35}
 .cvgd .cvg,.dr .cvg{display:block}.cvg.hit{opacity:1;border-style:solid}
 .cvdock .seg .mini{min-height:44px}
-#p-resp,#p-access,#p-svc{display:none!important}
 </style>
 </head>
 <body>
@@ -144,7 +143,7 @@ body.cvon .fab{display:none}#p-canvas.cvfs .cvdock{position:static;margin:8px 0 
   <nav class="tabs" id="tabs" role="tablist"></nav>
  </div>
 
- <section class="panel" id="p-orders"><h2>Проекты</h2><p class="hint">Создавайте проект и выбирайте его для редактирования приглашения. Сроки, доступ, ответы гостей, статистика и удаление управляются в отдельной админ-панели.</p>
+ <section class="panel" id="p-orders"><h2>Заказы</h2><p class="hint">У каждого клиента своя карточка. Данные заказов не смешиваются.</p>
   <div class="box"><h3>Новый заказ</h3>
    <label class="f"><span>Жених</span><input id="nG" autocomplete="off"></label><label class="f"><span>Невеста</span><input id="nB" autocomplete="off"></label>
    <label class="f"><span>Формат</span><select id="nFmt"><option value="site">A — Свадебный сайт</option><option value="card">B — Электронная открытка</option></select></label>
@@ -251,24 +250,24 @@ body.cvon .fab{display:none}#p-canvas.cvfs .cvdock{position:static;margin:8px 0 
   <div class="box"><h3>1. Соберите файл</h3><div class="row" style="margin-top:0"><button class="btn" id="gBtn">Собрать</button><button class="btn g" id="gSh">Сохранить файл</button></div><p class="hint" id="gInfo" style="margin:10px 0 0"></p><p class="hint" id="gName" style="margin:6px 0 0"></p></div>
   <div class="box"><h3>2. Загрузите на хостинг</h3><p class="hint" style="margin:0">Бесплатно: Netlify Drop (перетащите файл на страницу), Cloudflare Pages или GitHub Pages. Имя файла длинное и случайное, ссылку трудно угадать. Если хостинг удалит сайт, ссылка перестанет работать, поэтому храните файл у себя.</p></div>
   <div class="box"><h3>3. Запишите ссылку</h3><label class="f"><span>Публичная ссылка</span><input data-k="publicUrl" inputmode="url" autocapitalize="none" placeholder="https://…"></label><div class="row" style="margin-top:0"><button class="btn g" id="markPub">Отметить как опубликованное</button><button class="btn g" id="cpPub">Копировать ссылку</button></div><p class="hint" id="pubInfo" style="margin:10px 0 0"></p></div>
-  <div class="box"><h3>Приём ответов гостей</h3><p class="hint" style="margin:0">Ответы гостей автоматически сохраняются в Supabase и доступны в админ-панели. Здесь остаются только инструменты создания и настройки приглашения.</p></div></section>
+  <div class="box"><h3>Приём ответов гостей (бесплатно)</h3><label class="f"><span>Адрес Google-скрипта</span><input data-k="endpoint" inputmode="url" autocapitalize="none" placeholder="https://script.google.com/macros/s/…/exec"></label><p class="hint" style="margin:0">Ответы попадут в вашу Google-таблицу. Инструкция: файл google-sheets-setup.md. Без адреса анкета в файле работает как демо, и ответы до вас не доходят.</p></div></section>
 
  <section class="panel" id="p-quiz"><h2>Анкета гостей</h2><p class="hint">Ответ «приду / не смогу / позже» есть всегда. Дополнительные вопросы видят только те, кто придёт.</p>
   <label class="chk"><input type="checkbox" id="allowPlus"> Разрешить указать число сопровождающих</label><div id="qList"></div><h3>Добавить вопрос</h3><div class="row" id="qAdd"></div></section>
 
- <section class="panel" id="p-resp"><h2>Ответы гостей</h2><p class="hint">Ответы реальных гостей загружаются из Supabase. Ответы из предпросмотра помечаются как тестовые и не заменяют анкеты, отправленные гостями.</p>
+ <section class="panel" id="p-resp"><h2>Ответы гостей</h2><p class="hint" style="color:#B05A45"><b>Демо-режим.</b> Здесь только ответы, отправленные из предпросмотра на этом устройстве. Ответы настоящих гостей появятся после подключения сервера.</p>
   <div id="respSum"></div><div class="scroll" id="respTbl"></div><div class="row"><button class="btn g" id="csv">Экспорт CSV</button><button class="btn d" id="respClr">Очистить ответы</button></div></section>
 
- <section class="panel" id="p-access"><h2>Доступ</h2><p class="hint">Статус и срок действия синхронизируются с Supabase. Изменения ниже применяются к ссылкам заказа после сохранения.</p>
+ <section class="panel" id="p-access"><h2>Доступ</h2><p class="hint" style="color:#B05A45"><b>Локальная симуляция.</b> Настоящая проверка срока ссылки выполняется только на сервере (см. supabase-setup.md). Здесь можно увидеть, как это будет выглядеть для гостя.</p>
   <label class="f"><span>Статус</span><select data-k="status"><option value="trial">Пробный: 30 минут с первого открытия</option><option value="active">Активен</option><option value="off">Отключён</option></select></label>
   <label class="f"><span>Действует до (для активного)</span><input type="date" data-k="expiresAt"></label>
   <div class="row" style="margin:0 0 6px"><button class="btn g" id="ex6">Активировать на 6 месяцев</button><button class="btn g" id="ex1">Продлить на месяц</button><button class="btn g" id="exOff">Отключить</button></div>
-  <h3>Ссылка для клиента</h3><input readonly id="lnk"><p class="hint" style="margin:8px 0">Публичная ссылка на опубликованный файл приглашения. Ответы гостей отправляются в Supabase через отдельный токен доступа.</p>
+  <h3>Ссылка для клиента</h3><input readonly id="lnk"><p class="hint" style="margin:8px 0">Адрес заработает после подключения сервера. Ссылка длинная и случайная.</p>
   <div class="row" style="margin-top:0"><button class="btn g" id="cpLnk">Копировать</button><button class="btn g" id="newTok">Новая ссылка</button></div>
-  <h3>Ссылка на статистику гостей</h3><label class="f"><span>Адрес гостевого приложения</span><input id="statsBase" inputmode="url" autocapitalize="none" placeholder="https://username.github.io/guest-stats/"></label><div class="row" style="margin-top:0"><button class="btn g" id="saveStatsBase">Сохранить адрес</button><button class="btn g" id="copyStatsLink">Копировать ссылку статистики</button></div><input readonly id="statsLink" placeholder="Ссылка появится после синхронизации заказа"><p class="hint" id="statsInfo" style="margin:8px 0">Каждому заказу выдаётся отдельная закрытая ссылка статистики.</p><h3>Проверить глазами гостя</h3><div class="row" style="margin-top:0"><button class="btn" id="simG">Открыть как гость</button><button class="btn g" id="simX">Выйти</button><button class="btn g" id="trialRst">Сбросить пробный период</button></div><p class="hint" id="accInfo" style="margin-top:10px"></p></section>
+  <h3>Проверить глазами гостя</h3><div class="row" style="margin-top:0"><button class="btn" id="simG">Открыть как гость</button><button class="btn g" id="simX">Выйти</button><button class="btn g" id="trialRst">Сбросить пробный период</button></div><p class="hint" id="accInfo" style="margin-top:10px"></p></section>
 
  <section class="panel" id="p-svc"><h2>Сервис</h2>
-  <div class="box"><h3>База данных</h3><p class="hint" style="margin:0">Подключение Supabase включено. Заказы синхронизируются с облаком, ответы гостей записываются в таблицу responses, медиа загружаются в Яндекс Object Storage. Индикатор соединения отображается в верхней части экрана.</p></div>
+  <div class="box"><h3>База данных</h3><p class="hint" style="margin:0"><b style="color:#B05A45">Supabase не подключён.</b> Приложение работает в локальном демо-режиме: заказы, фото и ответы хранятся только в этом браузере. Готовая схема и инструкция: файл supabase-setup.md.</p></div>
   <div class="box"><h3>Уведомления для этого заказа</h3><p class="hint">Сначала ответ сохраняется в базе, затем уходит уведомление. Выберите каналы заранее.</p>
    <label class="chk"><input type="checkbox" data-nt="tg"> Telegram <small style="color:#B05A45">не подключён, не отправляется</small></label>
    <label class="chk"><input type="checkbox" data-nt="mail"> Электронная почта <small style="color:#B05A45">не подключена, не отправляется</small></label>
@@ -295,7 +294,7 @@ body.cvon .fab{display:none}#p-canvas.cvfs .cvdock{position:static;margin:8px 0 
   <button class="btn d" id="lookReset" style="margin-top:8px">Вернуть исходное оформление</button>
  </section>
 
- <section class="panel" id="p-data"><h2>Резервная копия</h2><p class="hint">Экспорт и импорт настроек текущего проекта, а также проверка локального хранилища. Управление заказами и ответами находится в админ-панели.</p>
+ <section class="panel" id="p-data"><h2>Данные</h2><p class="hint">Всё хранится локально в этом браузере. Сервера нет.</p>
   <div class="box"><h3>Экспорт</h3>
    <label class="chk"><input type="checkbox" id="expPh" checked> Включить фотографии</label>
    <div class="row" style="margin-top:0"><button class="btn" id="expBtn">Подготовить</button><button class="btn g" id="cpBtn">Скопировать</button><button class="btn g" id="shBtn">Сохранить файл</button></div>
@@ -306,7 +305,7 @@ body.cvon .fab{display:none}#p-canvas.cvfs .cvdock{position:static;margin:8px 0 
    <textarea id="impTa" placeholder="Вставьте сюда код настроек или выберите файл"></textarea>
    <p class="hint" style="margin:10px 0 0">Если в файле нет фотографий, текущие фото сохранятся.</p></div>
   <div class="box"><h3>Хранилище и фото</h3><p class="hint" id="diag" style="margin:0 0 10px">Нажмите «Проверить», чтобы увидеть, где браузер хранит фото.</p><button class="btn g" id="diagBtn">Проверить</button></div>
-  <div class="box"><h3>Облачная синхронизация</h3><p class="hint" style="margin:0">Проекты и настройки синхронизируются с Supabase, медиафайлы хранятся в Яндекс Object Storage. Ответы и статистика доступны в админ-панели.</p></div>
+  <div class="box"><h3>Ответы гостей</h3><p class="hint" style="margin:0">Сервера пока нет. Подтверждения сохраняются только в браузере самого гостя, вы их не увидите. Чтобы получать ответы на другом устройстве, нужна база Supabase: место для подключения подготовлено в коде (ResponseStore).</p></div>
   <div class="box"><h3>Сброс</h3><p class="hint">Вернёт демонстрационные данные и удалит загруженные фото.</p><button class="btn d" id="reset">Сбросить к демо</button></div>
  </section>
 </div>
@@ -427,6 +426,7 @@ const KEY="inv-orders-v2";let ORD=[],cur=0;
 let S=ORD[cur];
 const enabled=f=>S.format==="card"&&RSVP_ONLY.has(f)?false:S.feat[f]!==undefined?S.feat[f]:RANK[S.plan]>=RANK[FD[f].min];
 /* Подготовка к серверу: сейчас ответы гостей нигде не хранятся, кроме браузера гостя. Позже сюда подключается Supabase. */
+const ResponseStore={connected:false,async save(){throw new Error("Сервер не подключён")},async list(){throw new Error("Сервер не подключён")}};
 
 /* ---- IndexedDB ---- */
 const PS={mode:"idb",err:"",last:""};const errMsg=e=>e?((e.name&&e.name!=="Error"?e.name+": ":"")+(e.message||String(e))).slice(0,160):"неизвестная ошибка";
@@ -467,7 +467,7 @@ function small(){pubMode();accInfo();pubInfo();$("#bn").textContent=S.groom+" и
 window.addEventListener("message",e=>{if(e.source!==pv.contentWindow||!e.data)return;if(e.data.type==="ready"){ready=true;lastVK="";push();sendPhotos()}else if(e.data.type==="rsvp")addResp(e.data.data);else if(e.data.type==="openurl")openExternal(e.data.url)});
 
 /* ---- tabs ---- */
-const TABS=[["orders","Проекты"],["tpl","Шаблоны"],["main","Основное"],["date","Дата"],["photo","Фото и видео"],["prog","Программа"],["addr","Адрес"],["dress","Дресс-код"],["house","Проживание"],["transfer","Трансфер"],["extra","Доп. информация"],["music","Музыка"],["text","Оформление"],["canvas","Редактор главной страницы"],["quiz","Анкета"],["pub","Публикация"],["plan","Тариф"],["data","Данные"]];
+const TABS=[["orders","Заказы"],["tpl","Шаблоны"],["main","Основное"],["date","Дата"],["photo","Фото и видео"],["prog","Программа"],["addr","Адрес"],["dress","Дресс-код"],["house","Проживание"],["transfer","Трансфер"],["extra","Доп. информация"],["music","Музыка"],["text","Оформление"],["canvas","Редактор главной страницы"],["quiz","Анкета"],["resp","Ответы"],["pub","Публикация"],["access","Доступ"],["plan","Тариф"],["data","Данные"],["svc","Сервис"]];
 function applyTabs(){renderQuiz();$("#progList").classList.toggle("noev",!enabled("events"));$$("#tabs button").forEach(b=>{const f={dress:"dress",music:"music",quiz:"rsvp",resp:"rsvp",house:"hotel",transfer:"transfer",extra:"extra"}[b.dataset.t];b.hidden=f?!enabled(f):false})}
 $("#tabs").innerHTML=TABS.map(t=>`<button role="tab" data-t="${t[0]}">${t[1]}</button>`).join("");
 function show(id){document.body.classList.toggle("cvon",id==="canvas");if(id!=="canvas"){cvFlush();if(CV.fs)cvFs(false)}if(id==="canvas")setTimeout(cvOpen,0);$$(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+id));$$("#tabs button").forEach(b=>{const on=b.dataset.t===id;b.setAttribute("aria-selected",on);if(on)b.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"})});scrollTo(0,0);try{sessionStorage.setItem("inv-tab",id)}catch(e){}}
@@ -575,7 +575,7 @@ $("#reset").onclick=async()=>{if(!await ask("Вернуть демо-данны�
 const STAT={trial:"пробный",active:"активен",off:"отключён"};let showArch=false;
 const go=i=>{cur=i;S=ORD[i];simGuest=false;fillForm();renderAll();push();sendPhotos();save();cvEnsure().then(()=>{push();sendPhotos()})};
 function renderOrders(){$("#nPlan").innerHTML=Object.entries(PLANS).map(([k,p])=>`<option value="${k}">${p.n}</option>`).join("");fillTplSel();
- $("#ordList").innerHTML=ORD.map((o,i)=>o.archived&&!showArch?"":`<div class="oc ${i===cur?"cur":""} ${o.archived?"arch":""}" data-i="${i}"><b>${esc(o.groom)} и ${esc(o.bride)}</b><small>${o.format==="card"?"Открытка":"Сайт"} · ${PLANS[o.plan].n}${o.archived?" · архив":""}${i===cur?" · открыт в редакторе":""}</small><div class="row"><button class="btn" data-o="open">Открыть редактор</button></div></div>`).join("")||`<p class="hint">Заказов нет.</p>`}
+ $("#ordList").innerHTML=ORD.map((o,i)=>o.archived&&!showArch?"":`<div class="oc ${i===cur?"cur":""} ${o.archived?"arch":""}" data-i="${i}"><b>${esc(o.groom)} и ${esc(o.bride)}</b><small>${o.format==="card"?"Открытка":"Сайт"} · ${PLANS[o.plan].n} · ${STAT[o.status]}${o.status==="active"&&o.expiresAt?" до "+o.expiresAt:""}${o.archived?" · в архиве":""}</small><small>Ответов: ${o.responses.length}${i===cur?" · открыт в редакторе":""}</small><div class="row"><button class="btn" data-o="open">Открыть</button><button class="btn g" data-o="dup">Копия</button><button class="btn g" data-o="arc">${o.archived?"Из архива":"В архив"}</button><button class="btn d" data-o="del">Удалить</button></div></div>`).join("")||`<p class="hint">Заказов нет.</p>`}
 function fillTplSel(){const f=$("#nFmt").value,v=$("#nTpl").value;$("#nTpl").innerHTML=allT().filter(t=>t.fmt==="both"||t.fmt===f).map(t=>`<option value="${t.id}">${esc(t.cat)}: ${esc(t.name)}</option>`).join("");if(v)$("#nTpl").value=v}
 $("#nFmt").onchange=fillTplSel;$("#showArch").onchange=e=>{showArch=e.target.checked;renderOrders()};
 $("#newOrd").onclick=()=>{const g=$("#nG").value.trim(),b=$("#nB").value.trim();if(!g||!b)return toast("Укажите имена жениха и невесты");const t=allT().find(x=>x.id===$("#nTpl").value)||BUILTIN[0];
@@ -1064,7 +1064,7 @@ try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}ca
 $("#fab").onclick=()=>document.body.classList.add("pv");$("#pvx").onclick=()=>document.body.classList.remove("pv");
 $("#replay").onclick=()=>pv.contentWindow.postMessage({type:"replay"},"*");
 addEventListener("keydown",e=>{if(e.key==="Escape")document.body.classList.remove("pv")});
-function renderAll(){pubMode();renderProg();renderLook();renderPhotos();renderCols();renderMusic();renderPlan();renderFormat();renderOrders();renderTpl();renderQuiz();renderResp();renderDays();renderLocs();renderHouse();renderTransfer();renderVideo();$$("[data-nt]").forEach(c=>c.checked=!!S.notify[c.dataset.nt]);small();if(window.wsStatsInfo)window.wsStatsInfo()}
+function renderAll(){pubMode();renderProg();renderLook();renderPhotos();renderCols();renderMusic();renderPlan();renderFormat();renderOrders();renderTpl();renderQuiz();renderResp();renderDays();renderLocs();renderHouse();renderTransfer();renderVideo();$$("[data-nt]").forEach(c=>c.checked=!!S.notify[c.dataset.nt]);small()}
 $("#dev").onclick=()=>{document.body.classList.toggle("wide");$("#dev").textContent=document.body.classList.contains("wide")?"Телефон":"Компьютер"};
 
 (async()=>{
@@ -1115,10 +1115,6 @@ function authMessage(s,ok=false){authMsg.textContent=s;authMsg.classList.toggle(
 function showAuth(s){authBox.classList.add("on");document.body.classList.add("ws-locked");pill.style.display="none";if(s)authMessage(s)}
 function hideAuth(){authBox.classList.remove("on");document.body.classList.remove("ws-locked");pill.style.display="flex"}
 function cloudStatus(s){pillText.textContent=s}
-function statsInfo(){const baseInput=$id("statsBase"),out=$id("statsLink"),info=$id("statsInfo");if(!baseInput||!out)return;const base=localStorage.getItem("ws-guest-stats-base")||"";if(document.activeElement!==baseInput)baseInput.value=base;if(!S||!S._cabinetToken){out.value="Сначала сохраните заказ в облаке";if(info)info.textContent="Токен статистики появится после первой синхронизации заказа.";return}if(!base){out.value="Укажите адрес гостевого приложения";if(info)info.textContent="Вставьте URL опубликованного guest-stats.html и сохраните его.";return}try{const u=new URL(base);u.searchParams.set("t",S._cabinetToken);out.value=u.href;if(info)info.textContent="Персональная ссылка статистики для этого заказа. Не публикуйте её в открытом доступе."}catch(e){out.value="Некорректный адрес гостевого приложения"}}
-window.wsStatsInfo=statsInfo;
-const statsSave=$id("saveStatsBase");if(statsSave)statsSave.onclick=()=>{const v=$id("statsBase").value.trim();if(v&&!/^https:\/\//i.test(v))return toast("Нужен полный HTTPS-адрес");try{if(v)new URL(v)}catch(e){return toast("Некорректный адрес")};localStorage.setItem("ws-guest-stats-base",v);statsInfo();toast("Адрес гостевого приложения сохранён")};
-const statsCopy=$id("copyStatsLink");if(statsCopy)statsCopy.onclick=()=>{const v=$id("statsLink").value;if(v&&v.startsWith("https://"))copyText(v);else toast("Сначала настройте ссылку статистики")};
 function clone(o){return JSON.parse(JSON.stringify(o))}
 function getCanvasStore(){try{return JSON.parse(localStorage.getItem(CVK))||{}}catch(e){return{}}}
 function putCanvasStore(v){try{localStorage.setItem(CVK,JSON.stringify(v))}catch(e){}}
@@ -1176,7 +1172,6 @@ async function upsertOrder(o){
  const row=orderRow(o);
  const {error}=await sb.from("orders").upsert(row,{onConflict:"id"});
  if(error)throw error;
- statsInfo();
 }
 async function syncOrder(o){
  if(!cloudReady||cloudLoading||!o)return;
