@@ -551,8 +551,8 @@ $("#doImp").onclick=async()=>{const t=$("#impTa").value.trim();if(!t)return toas
   ns.id=S.id;ns.token=S.token;ns.responses=S.responses;ns.status=S.status;ns.expiresAt=S.expiresAt;ns.firstOpen=S.firstOpen;ns.videoId=S.videoId;ns.videoPosterId=S.videoPosterId;ns.videoName=S.videoName;ORD[cur]=S=ns;fillForm();renderAll();push();sendPhotos();save();$("#impTa").value="";toast("Настройки импортированы")}catch(err){console.error(err);toast("Не удалось импортировать")}};
 let guestHtml="";
 async function buildGuest(){await cvEnsure();const msgs=[{type:"cfg",cfg:pubCfg(),vars:vars()},photoMsg(),musMsg(),vidMsg()];const srv=S.endpoint?"<script>window.__SERVER="+JSON.stringify({url:S.endpoint,token:S.token}).replace(/</g,"\\u003c")+"<\/script>":"";const boot="<script>window.__BOOT="+JSON.stringify(msgs).replace(/</g,"\\u003c")+"<\/script>";return INVITE.replace("<script>",()=>srv+boot+"<script>")}
-$("#gBtn").onclick=async()=>{if(S.format==="card")return pdfBuild();toast("Сборка…",true);guestHtml=await buildGuest();$("#gInfo").textContent=`Файл собран: ${(guestHtml.length/1048576).toFixed(1)} МБ. Редактора и цен в нём нет.`;toast("Готово")};
-$("#gSh").onclick=async()=>{if(S.format==="card")return pdfOut();if(!guestHtml)guestHtml=await buildGuest();$("#gInfo").textContent=`Файл собран: ${(guestHtml.length/1048576).toFixed(1)} МБ. Редактора и цен в нём нет.`;shareFile(S.token+".html","text/html",guestHtml,"Свадебное приглашение")};
+if($("#gBtn"))$("#gBtn").onclick=async()=>{if(S.format==="card")return pdfBuild();toast("Сборка…",true);guestHtml=await buildGuest();$("#gInfo").textContent=`Файл собран: ${(guestHtml.length/1048576).toFixed(1)} МБ. Редактора и цен в нём нет.`;toast("Готово")};
+if($("#gSh"))$("#gSh").onclick=async()=>{if(S.format==="card")return pdfOut();if(!guestHtml)guestHtml=await buildGuest();$("#gInfo").textContent=`Файл собран: ${(guestHtml.length/1048576).toFixed(1)} МБ. Редактора и цен в нём нет.`;shareFile(S.token+".html","text/html",guestHtml,"Свадебное приглашение")};
 $("#reset").onclick=async()=>{if(!await ask("Вернуть демо-данные в этом заказе и удалить его фото, музыку и видео? Другие заказы не изменятся.","Сбросить"))return;for(const id of idsOf(S))await rmPhoto(id);const keep={id:S.id,token:S.token,responses:S.responses};ORD[cur]=S=Object.assign(DEMO(),keep);fillForm();renderAll();push();sendPhotos();save();toast("Демо-данные восстановлены")};
 
 /* ---- orders ---- */
@@ -949,7 +949,7 @@ cvEl.addEventListener("pointerup",cvTpEnd,true);cvEl.addEventListener("pointerca
 const PDF={blob:null,name:"",busy:false},SC=2,imgCache=new Map();
 function pubMode(){const card=S.format==="card",b=$$("#p-pub .box"),h=$("#p-pub>.hint");if(!b.length)return;if(h){if(!h.dataset.o)h.dataset.o=h.textContent;h.textContent=card?"Открытка собирается в многостраничный PDF: без ответов гостей и без конверта. Готовый файл можно скачать и отправить гостям в мессенджере или почте. Ссылки на карты в нём нажимаются.":h.dataset.o}
  [1,2,3].forEach(i=>{if(b[i])b[i].style.display=card?"none":""});b[0].querySelector("h3").textContent=card?"Соберите PDF-открытку":"1. Соберите файл";
- $("#gBtn").textContent=card?"Создать PDF":"Собрать";$("#gSh").textContent=card?"Отправить / сохранить PDF":"Сохранить файл"}
+ if($("#gBtn"))$("#gBtn").textContent=card?"Создать PDF":"Собрать";if($("#gSh"))$("#gSh").textContent=card?"Отправить / сохранить PDF":"Сохранить файл"}
 const loadImg=u=>{if(!u)return Promise.resolve(null);if(!imgCache.has(u))imgCache.set(u,new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=u}));return imgCache.get(u)};
 function pxFilter(cv,fl){const ops=[];fl.replace(/([\w-]+)\(([^)]*)\)/g,(m,n,v)=>{v=v.trim();let x=parseFloat(v);if(/%$/.test(v))x/=100;ops.push([n,x])});
  const g=cv.getContext("2d"),d=g.getImageData(0,0,cv.width,cv.height),a=d.data,cp=v=>v<0?0:v>1?1:v;
@@ -1115,8 +1115,7 @@ body.ws-locked{overflow:hidden}
 (()=>{
 const SUPABASE_URL="https://hnwmhaozkecsdgstkass.supabase.co";
 const SUPABASE_KEY="sb_publishable_4eJrRwfidcy-EKEFd9oCSw_DuJ2bZed";
-// Хранилище редактора холста в административной части.
-const CVK="inv-canvas-v1",CVURL=new Map();
+// Используем общее хранилище редактора холста, объявленное выше.
 const SUPABASE_ANON_JWT="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhud21oYW96a2Vjc2Rnc3RrYXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM5NTU3MjIsImV4cCI6MjEwOTUzMTcyMn0.K51HAcT1ClXdJjKXlGW5QVnLDXFXdADt8pue7KWQheY";
 const EMAIL_DEFAULT="egorkinmaks7@gmail.com";
 const $id=id=>document.getElementById(id);
