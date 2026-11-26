@@ -235,7 +235,29 @@ body.cvon .fab{display:none}#p-canvas.cvfs .cvdock{position:static;margin:8px 0 
   <p class="hint">Абзацы разделяйте пустой строкой. Подойдут пожелания молодожёнов, просьбы к гостям, что лучше не дарить, организационные уточнения.</p>
   <h3>Фотографии</h3><div class="grid" id="extraBox"></div></section>
 
- <section class="panel" id="p-canvas"><h2>Редактор главной страницы</h2>
+ <section class="panel" id="p-text"><h2>Оформление</h2><p class="hint">Цвета, шрифты и стиль приглашения.</p>
+  <div class="box"><h3>Готовые палитры</h3><div class="row" id="pals" style="margin-top:0"></div></div>
+  <div class="box"><h3>Свои цвета</h3><div id="cols"></div><p class="hint" id="warn" style="margin:6px 0 0;color:#B05A45"></p></div>
+  <div class="box"><h3>Шрифты</h3><div id="fonts"></div></div>
+  <div class="box"><h3>Стиль</h3><div class="row" id="styles" style="margin-top:0"></div></div>
+  <button class="btn g" id="lookReset" type="button">Вернуть исходное оформление</button></section>
+
+  <section class="panel" id="p-quiz"><h2>Анкета гостей</h2><p class="hint">Вопросы, которые гость увидит после ответа «С радостью приду».</p>
+  <label class="chk"><input type="checkbox" id="allowPlus"> Можно прийти с гостями (+1)</label>
+  <div id="qList"></div><h3>Добавить вопрос</h3><div class="row" id="qAdd" style="margin-top:0"></div></section>
+
+  <section class="panel" id="p-plan"><h2>Тариф</h2><p class="hint">Тариф определяет набор функций приглашения.</p>
+  <div class="box"><h3>Тариф</h3><div class="row" id="plans" style="margin-top:0"></div></div>
+  <div class="box"><h3>Цены</h3><div id="prices"></div></div>
+  <div class="box"><h3>Функции</h3><div id="feats"></div><button class="btn g" id="featReset" type="button">Набор по тарифу</button></div></section>
+
+  <div id="legacyHidden" hidden>
+  <section class="panel" id="p-resp"><div id="respSum"></div><div id="respTbl"></div><button id="respClr" type="button"></button><button id="csv" type="button"></button></section>
+  <section class="panel" id="p-access"><input id="lnk" readonly><p id="accInfo"></p><button id="cpLnk" type="button"></button><button id="newTok" type="button"></button><button id="ex6" type="button"></button><button id="ex1" type="button"></button><button id="exOff" type="button"></button><button id="trialRst" type="button"></button><button id="simG" type="button"></button><button id="simX" type="button"></button></section>
+  <section class="panel" id="p-svc"></section>
+  </div>
+
+  <section class="panel" id="p-canvas"><h2>Редактор главной страницы</h2>
   <p class="hint">Свободный холст размером с экран телефона. Добавляйте фото и надписи, двигайте пальцем, тяните за точки по краям, чтобы изменить размер. Все инструменты в панели внизу, кнопка «Назад» отменяет последнее действие. Если на холсте есть элементы, он становится первым экраном приглашения, а обратный отсчёт и галерея из шаблона идут сразу под ним. Пустой холст: остаётся оформление шаблона. Надпись «Мы женимся» добавьте сами. Фон «как в шаблоне» совпадает с остальными страницами. Двумя пальцами можно менять размер и поворот.</p>
   <input type="file" id="cvFile" class="vh" multiple accept="image/jpeg,image/png,image/webp,image/heic,image/heif,image/*">
   <div class="cvst" id="cvStage"><div class="cvsz" id="cvSize"><div class="cv" id="cv" data-w="393" data-h="852"><div class="cvl" id="cvLayer"></div><div class="cvg v" id="cvGv"></div><div class="cvg h" id="cvGh"></div><div class="cvempty">Холст пуст</div></div></div></div>
