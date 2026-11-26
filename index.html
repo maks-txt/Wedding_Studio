@@ -133,6 +133,7 @@ body.cvon .fab{display:none}#p-canvas.cvfs .cvdock{position:static;margin:8px 0 
 .cvg.v{left:50%;top:0;height:100%;border-left:calc(1px/var(--z,1)) dashed #e0457b;opacity:.35}.cvg.h{top:50%;left:0;width:100%;border-top:calc(1px/var(--z,1)) dashed #e0457b;opacity:.35}
 .cvgd .cvg,.dr .cvg{display:block}.cvg.hit{opacity:1;border-style:solid}
 .cvdock .seg .mini{min-height:44px}
+#p-resp,#p-access,#p-svc{display:none!important}
 </style>
 </head>
 <body>
@@ -143,7 +144,7 @@ body.cvon .fab{display:none}#p-canvas.cvfs .cvdock{position:static;margin:8px 0 
   <nav class="tabs" id="tabs" role="tablist"></nav>
  </div>
 
- <section class="panel" id="p-orders"><h2>Заказы</h2><p class="hint">У каждого клиента своя карточка. Данные заказов не смешиваются.</p>
+ <section class="panel" id="p-orders"><h2>Проекты</h2><p class="hint">Создавайте проект и выбирайте его для редактирования приглашения. Сроки, доступ, ответы гостей, статистика и удаление управляются в отдельной админ-панели.</p>
   <div class="box"><h3>Новый заказ</h3>
    <label class="f"><span>Жених</span><input id="nG" autocomplete="off"></label><label class="f"><span>Невеста</span><input id="nB" autocomplete="off"></label>
    <label class="f"><span>Формат</span><select id="nFmt"><option value="site">A — Свадебный сайт</option><option value="card">B — Электронная открытка</option></select></label>
@@ -246,55 +247,35 @@ body.cvon .fab{display:none}#p-canvas.cvfs .cvdock{position:static;margin:8px 0 
    <div id="cvProps"></div></div></section>
 
  <section class="panel" id="p-pub"><h2>Публикация</h2>
-  <p class="hint">Готовое приглашение — один файл. После загрузки на бесплатный хостинг оно работает само, без Wedding Studio и Claude. Опубликовать одной кнопкой приложение не может: у него нет сервера и доступа к вашему хостингу.</p>
-  <div class="box"><h3>1. Соберите файл</h3><div class="row" style="margin-top:0"><button class="btn" id="gBtn">Собрать</button><button class="btn g" id="gSh">Сохранить файл</button></div><p class="hint" id="gInfo" style="margin:10px 0 0"></p><p class="hint" id="gName" style="margin:6px 0 0"></p></div>
-  <div class="box"><h3>2. Загрузите на хостинг</h3><p class="hint" style="margin:0">Бесплатно: Netlify Drop (перетащите файл на страницу), Cloudflare Pages или GitHub Pages. Имя файла длинное и случайное, ссылку трудно угадать. Если хостинг удалит сайт, ссылка перестанет работать, поэтому храните файл у себя.</p></div>
-  <div class="box"><h3>3. Запишите ссылку</h3><label class="f"><span>Публичная ссылка</span><input data-k="publicUrl" inputmode="url" autocapitalize="none" placeholder="https://…"></label><div class="row" style="margin-top:0"><button class="btn g" id="markPub">Отметить как опубликованное</button><button class="btn g" id="cpPub">Копировать ссылку</button></div><p class="hint" id="pubInfo" style="margin:10px 0 0"></p></div>
-  <div class="box"><h3>Приём ответов гостей (бесплатно)</h3><label class="f"><span>Адрес Google-скрипта</span><input data-k="endpoint" inputmode="url" autocapitalize="none" placeholder="https://script.google.com/macros/s/…/exec"></label><p class="hint" style="margin:0">Ответы попадут в вашу Google-таблицу. Инструкция: файл google-sheets-setup.md. Без адреса анкета в файле работает как демо, и ответы до вас не доходят.</p></div></section>
-
- <section class="panel" id="p-quiz"><h2>Анкета гостей</h2><p class="hint">Ответ «приду / не смогу / позже» есть всегда. Дополнительные вопросы видят только те, кто придёт.</p>
-  <label class="chk"><input type="checkbox" id="allowPlus"> Разрешить указать число сопровождающих</label><div id="qList"></div><h3>Добавить вопрос</h3><div class="row" id="qAdd"></div></section>
-
- <section class="panel" id="p-resp"><h2>Ответы гостей</h2><p class="hint" style="color:#B05A45"><b>Демо-режим.</b> Здесь только ответы, отправленные из предпросмотра на этом устройстве. Ответы настоящих гостей появятся после подключения сервера.</p>
-  <div id="respSum"></div><div class="scroll" id="respTbl"></div><div class="row"><button class="btn g" id="csv">Экспорт CSV</button><button class="btn d" id="respClr">Очистить ответы</button></div></section>
-
- <section class="panel" id="p-access"><h2>Доступ</h2><p class="hint" style="color:#B05A45"><b>Локальная симуляция.</b> Настоящая проверка срока ссылки выполняется только на сервере (см. supabase-setup.md). Здесь можно увидеть, как это будет выглядеть для гостя.</p>
-  <label class="f"><span>Статус</span><select data-k="status"><option value="trial">Пробный: 30 минут с первого открытия</option><option value="active">Активен</option><option value="off">Отключён</option></select></label>
-  <label class="f"><span>Действует до (для активного)</span><input type="date" data-k="expiresAt"></label>
-  <div class="row" style="margin:0 0 6px"><button class="btn g" id="ex6">Активировать на 6 месяцев</button><button class="btn g" id="ex1">Продлить на месяц</button><button class="btn g" id="exOff">Отключить</button></div>
-  <h3>Ссылка для клиента</h3><input readonly id="lnk"><p class="hint" style="margin:8px 0">Адрес заработает после подключения сервера. Ссылка длинная и случайная.</p>
-  <div class="row" style="margin-top:0"><button class="btn g" id="cpLnk">Копировать</button><button class="btn g" id="newTok">Новая ссылка</button></div>
-  <h3>Проверить глазами гостя</h3><div class="row" style="margin-top:0"><button class="btn" id="simG">Открыть как гость</button><button class="btn g" id="simX">Выйти</button><button class="btn g" id="trialRst">Сбросить пробный период</button></div><p class="hint" id="accInfo" style="margin-top:10px"></p></section>
-
- <section class="panel" id="p-svc"><h2>Сервис</h2>
-  <div class="box"><h3>База данных</h3><p class="hint" style="margin:0"><b style="color:#B05A45">Supabase не подключён.</b> Приложение работает в локальном демо-режиме: заказы, фото и ответы хранятся только в этом браузере. Готовая схема и инструкция: файл supabase-setup.md.</p></div>
-  <div class="box"><h3>Уведомления для этого заказа</h3><p class="hint">Сначала ответ сохраняется в базе, затем уходит уведомление. Выберите каналы заранее.</p>
-   <label class="chk"><input type="checkbox" data-nt="tg"> Telegram <small style="color:#B05A45">не подключён, не отправляется</small></label>
-   <label class="chk"><input type="checkbox" data-nt="mail"> Электронная почта <small style="color:#B05A45">не подключена, не отправляется</small></label>
-   <label class="chk"><input type="checkbox" data-nt="max"> MAX <small style="color:#B05A45">не подключён, не отправляется</small></label>
-   <p class="hint" style="margin:0">Для работы нужен сервер: токен бота и ключ почтового сервиса хранятся в секретах сервера, а не в приложении. Для MAX сначала проверьте наличие официального API для ботов.</p></div></section>
-
- <section class="panel" id="p-plan"><h2>Тариф</h2><p class="hint">Виден только вам. Гостям цены и названия тарифов не показываются.</p><div id="plans"></div><div id="prices"></div>
-  <h3>Функции</h3><div id="feats"></div><button class="btn g" id="featReset">Вернуть набор по тарифу</button></section>
-
- <section class="panel" id="p-text"><h2>Тексты и оформление</h2><p class="hint">Все надписи приглашения. Изменения видны сразу.</p>
-  <label class="f"><span>Надпись над именами</span><input data-k="preTitle"></label>
-  <label class="f"><span>Надпись на конверте</span><input data-k="coverTop"></label>
-  <label class="f"><span>Заголовок отсчёта</span><input data-k="countTitle"></label>
-  <label class="f"><span>Текст под отсчётом</span><textarea data-k="countText" rows="2"></textarea></label>
-  <label class="f"><span>Заголовок галереи</span><input data-k="galleryTitle"></label>
-  <label class="f"><span>Заголовок программы</span><input data-k="programTitle"></label>
-  <label class="f"><span>Подсказка под программой</span><input data-k="programLead"></label>
-  <label class="f"><span>Заголовок подтверждения</span><input data-k="rsvpTitle"></label>
-  <label class="f"><span>Текст подтверждения (срок ответа)</span><textarea data-k="rsvpText" rows="2"></textarea></label>
-  <label class="f"><span>Подпись внизу</span><input data-k="footer"></label>
-  <h3>Готовые сочетания</h3><div id="pals"></div>
-  <h3>Свои цвета</h3><div id="cols"></div><p class="hint" id="warn" style="color:#B05A45"></p>
-  <h3>Визуальный стиль</h3><div id="styles"></div><h3>Шрифты</h3><div id="fonts"></div>
-  <button class="btn d" id="lookReset" style="margin-top:8px">Вернуть исходное оформление</button>
+  <p class="hint">Публикуйте приглашение прямо из Wedding Studio. Файл автоматически отправляется в ваше Яндекс-хранилище, а ссылка создаётся сама. Никаких Netlify, папок и ручной загрузки.</p>
+  <div class="box"><h3>1. Название и адрес сайта</h3>
+   <label class="f"><span>Название проекта</span><input data-k="projectName" maxlength="120" placeholder="Свадьба Максимки и Анастасии"></label>
+   <label class="f"><span>Короткий адрес (латиницей)</span><input data-k="publicSlug" maxlength="70" autocapitalize="none" placeholder="maxim-i-anastasiya"></label>
+   <button class="btn g" id="makeSlug" type="button">Сформировать адрес из названия</button>
+   <p class="hint" style="margin:8px 0 0">Название видно в списке проектов. Короткий адрес используется в имени опубликованного файла.</p>
+  </div>
+  <div class="box"><h3>2. Опубликовать приглашение</h3>
+   <button class="btn" id="publishNow" type="button">Опубликовать / обновить сайт</button>
+   <p class="hint" id="gInfo" style="margin:10px 0 0"></p>
+   <p class="hint" id="gName" style="margin:6px 0 0"></p>
+  </div>
+  <div class="box"><h3>3. Ссылка на приглашение</h3>
+   <label class="f"><span>Публичная ссылка для всех приглашённых</span><input data-k="publicUrl" inputmode="url" autocapitalize="none" placeholder="Появится после публикации" readonly></label>
+   <div class="row" style="margin-top:0"><button class="btn g" id="cpPub">Копировать ссылку</button><button class="btn g" id="openPub" type="button">Открыть приглашение</button></div>
+   <p class="hint" id="pubInfo" style="margin:10px 0 0"></p>
+  </div>
+  <div class="box"><h3>4. Сайт пары со статистикой</h3>
+   <p class="hint" style="margin:0 0 10px">Это отдельная персональная страница с ответами и статистикой именно этой свадьбы. Ссылку передавайте жениху и невесте, не всем гостям.</p>
+   <label class="f"><span>Адрес приложения статистики (указывается один раз)</span><input id="statsBase" inputmode="url" autocapitalize="none" placeholder="https://ваш-сайт-статистики.pages.dev"></label>
+   <button class="btn g" id="saveStatsBase" type="button">Сохранить адрес приложения</button>
+   <label class="f"><span>Персональная ссылка этой пары</span><input id="statsLink" readonly placeholder="Появится после сохранения заказа и настройки приложения"></label>
+   <div class="row" style="margin-top:0"><button class="btn g" id="copyStatsLink" type="button">Копировать ссылку статистики</button><button class="btn g" id="openStatsLink" type="button">Открыть сайт пары</button></div>
+   <p class="hint" id="statsInfo" style="margin:10px 0 0"></p>
+  </div>
+  <div class="box"><h3>Ответы гостей</h3><p class="hint" style="margin:0">Ответы автоматически сохраняются в Supabase и появляются в админ-панели и статистике этой свадьбы. При повторной публикации ссылка остаётся прежней, а содержимое приглашения обновляется.</p></div>
  </section>
 
- <section class="panel" id="p-data"><h2>Данные</h2><p class="hint">Всё хранится локально в этом браузере. Сервера нет.</p>
+ <section class="panel" id="p-data"><h2>Резервная копия</h2><p class="hint">Экспорт и импорт настроек текущего проекта, а также проверка локального хранилища. Управление заказами и ответами находится в админ-панели.</p>
   <div class="box"><h3>Экспорт</h3>
    <label class="chk"><input type="checkbox" id="expPh" checked> Включить фотографии</label>
    <div class="row" style="margin-top:0"><button class="btn" id="expBtn">Подготовить</button><button class="btn g" id="cpBtn">Скопировать</button><button class="btn g" id="shBtn">Сохранить файл</button></div>
@@ -305,7 +286,7 @@ body.cvon .fab{display:none}#p-canvas.cvfs .cvdock{position:static;margin:8px 0 
    <textarea id="impTa" placeholder="Вставьте сюда код настроек или выберите файл"></textarea>
    <p class="hint" style="margin:10px 0 0">Если в файле нет фотографий, текущие фото сохранятся.</p></div>
   <div class="box"><h3>Хранилище и фото</h3><p class="hint" id="diag" style="margin:0 0 10px">Нажмите «Проверить», чтобы увидеть, где браузер хранит фото.</p><button class="btn g" id="diagBtn">Проверить</button></div>
-  <div class="box"><h3>Ответы гостей</h3><p class="hint" style="margin:0">Сервера пока нет. Подтверждения сохраняются только в браузере самого гостя, вы их не увидите. Чтобы получать ответы на другом устройстве, нужна база Supabase: место для подключения подготовлено в коде (ResponseStore).</p></div>
+  <div class="box"><h3>Облачная синхронизация</h3><p class="hint" style="margin:0">Проекты и настройки синхронизируются с Supabase, медиафайлы хранятся в Яндекс Object Storage. Ответы и статистика доступны в админ-панели.</p></div>
   <div class="box"><h3>Сброс</h3><p class="hint">Вернёт демонстрационные данные и удалит загруженные фото.</p><button class="btn d" id="reset">Сбросить к демо</button></div>
  </section>
 </div>
@@ -374,7 +355,7 @@ function preset(k){const v=PALS[k].v;return{bg:v["--milk"],text:v["--ink"],accen
 function mix(a,b,p){const m=n=>Math.round(parseInt(a.slice(n,n+2),16)*(1-p)+parseInt(b.slice(n,n+2),16)*p).toString(16).padStart(2,"0");return"#"+m(1)+m(3)+m(5)}
 function lum(h){const f=n=>{const c=parseInt(h.slice(n,n+2),16)/255;return c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4)};return .2126*f(1)+.7152*f(3)+.0722*f(5)}
 const ratio=(a,b)=>{const x=lum(a),y=lum(b);return(Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
-const DEMO=()=>({groom:"Александр",bride:"Мария",city:"Подмосковье",date:"2027-06-19",time:"16:00",
+const DEMO=()=>({projectName:"",publicSlug:"",groom:"Александр",bride:"Мария",city:"Подмосковье",date:"2027-06-19",time:"16:00",
  venueName:"Усадьба «Зелёный дом»",venueAddress:"Московская область, деревня Липки, ул. Садовая, 12",mapQuery:"Усадьба Зелёный дом, Липки, Московская область",
  program:[["15:30","Сбор гостей","Приветственные напитки и лёгкие закуски в саду.","Усадьба «Зелёный дом»","деревня Липки, ул. Садовая, 12"],["16:00","Церемония","Выездная церемония у озера. Просим не опаздывать.","",""],["17:00","Фуршет и фото","Время для общих фотографий и тёплых слов.","",""],["18:30","Праздничный ужин","Ужин в зале усадьбы, тосты и первый танец.","",""],["22:30","Завершение вечера","Праздничный торт и проводы молодожёнов.","",""]].map(a=>({id:uid(),time:a[0],title:a[1],text:a[2],place:a[3],address:a[4],mapUrl:"",photoId:null,day:0})),
  preTitle:"МЫ ЖЕНИМСЯ",coverTop:"ВАС ПРИГЛАШАЮТ",countTitle:"До нашего дня",countText:"Мы будем счастливы разделить этот день с вами.",galleryTitle:"Наши мгновения",
@@ -385,7 +366,9 @@ function cleanResp(x){x=x||{};const qa={};if(x.qa&&typeof x.qa==="object")for(co
 const str=(v,d)=>typeof v==="string"?v.slice(0,600):d;
 function clean(o){const r=DEMO();o=o&&typeof o==="object"?o:{};if(!o.fonts&&LEGACYF[o.font])o={...o,fonts:LEGACYF[o.font]};if(!Array.isArray(o.locs)&&(o.venueName||o.venueAddress))o={...o,locs:[{name:o.venueName||"",address:o.venueAddress||"",time:o.time||""}]};
  for(const k in r){const v=o[k];
-  if(k==="program"){if(Array.isArray(v))r.program=v.slice(0,30).map(x=>{x=x||{};return{id:uid(),time:str(x.time,"12:00"),title:str(x.title,""),text:str(x.text,""),place:str(x.place,""),address:str(x.address,""),mapUrl:cleanUrl(x.mapUrl),photoId:typeof x.photoId==="string"?x.photoId:null,day:Math.max(0,Math.min(9,Math.round(Number(x.day))||0))}})}
+  if(k==="projectName"){r[k]=str(v,"").slice(0,120)}
+  else if(k==="publicSlug"){r[k]=str(v,"").toLowerCase().replace(/[^a-z0-9-]/g,"").replace(/-+/g,"-").replace(/^-|-$/g,"").slice(0,70)}
+  else if(k==="program"){if(Array.isArray(v))r.program=v.slice(0,30).map(x=>{x=x||{};return{id:uid(),time:str(x.time,"12:00"),title:str(x.title,""),text:str(x.text,""),place:str(x.place,""),address:str(x.address,""),mapUrl:cleanUrl(x.mapUrl),photoId:typeof x.photoId==="string"?x.photoId:null,day:Math.max(0,Math.min(9,Math.round(Number(x.day))||0))}})}
   else if(k==="galleryIds"||k==="dressIds"||k==="housingIds"||k==="extraIds"){if(Array.isArray(v))r[k]=v.filter(x=>typeof x==="string").slice(0,k==="dressIds"?8:12)}
   else if(k==="dressYes"||k==="dressNo"){if(Array.isArray(v))r[k]=v.map(hex).filter(Boolean).slice(0,8)}
   else if(k==="heroId"||k==="musicId"||k==="videoId"||k==="videoPosterId"){r[k]=typeof v==="string"?v:null}
@@ -424,9 +407,9 @@ const KEY="inv-orders-v2";let ORD=[],cur=0;
 (function(){try{const o=JSON.parse(localStorage.getItem(KEY));if(o&&Array.isArray(o.orders)&&o.orders.length){ORD=o.orders.map(clean);cur=Math.max(0,Math.min(o.cur|0,ORD.length-1));return}}catch(e){}
  let old=null;try{old=JSON.parse(localStorage.getItem(LS))}catch(e){}ORD=[clean(old)];cur=0})();
 let S=ORD[cur];
+if(!S.projectName)S.projectName=`Свадьба ${S.groom||""} и ${S.bride||""}`.trim();
 const enabled=f=>S.format==="card"&&RSVP_ONLY.has(f)?false:S.feat[f]!==undefined?S.feat[f]:RANK[S.plan]>=RANK[FD[f].min];
 /* Подготовка к серверу: сейчас ответы гостей нигде не хранятся, кроме браузера гостя. Позже сюда подключается Supabase. */
-const ResponseStore={connected:false,async save(){throw new Error("Сервер не подключён")},async list(){throw new Error("Сервер не подключён")}};
 
 /* ---- IndexedDB ---- */
 const PS={mode:"idb",err:"",last:""};const errMsg=e=>e?((e.name&&e.name!=="Error"?e.name+": ":"")+(e.message||String(e))).slice(0,160):"неизвестная ошибка";
@@ -451,7 +434,7 @@ function ask(text,ok){return new Promise(res=>{$("#mt").textContent=text;$("#mye
 let st;function save(){$("#st").textContent="Сохранение…";clearTimeout(st);st=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify({orders:ORD,cur}));$("#st").textContent=PS.mode==="mem"?"Фото только в памяти ⚠":"Сохранено ✓"}catch(e){$("#st").textContent="Не сохранено"}},250)}
 const pv=$("#pv");let ready=false;
 const fmtDate=d=>{const x=new Date(d+"T12:00:00");return isNaN(x)?"":x.toLocaleDateString("ru-RU",{day:"numeric",month:"long",year:"numeric"}).replace(/\s?г\.$/,"")};
-const pubCfg=()=>{const{prices,plan,feat,musicId,colors,notes,token,responses,status,trialMin,firstOpen,expiresAt,archived,id,created,templateName,questions,notify,endpoint,publicUrl,publishedAt,days,locs,housing,fonts,...p}=S;const l0=S.locs[0]||{},E=enabled;return{...p,canvas:cvPub(),fonts:fontsCfg(S.fonts),days:E("days")?S.days:S.days.slice(0,1),program:E("days")?S.program:S.program.map(e=>({...e,day:0})),locs:E("events")?S.locs:S.locs.slice(0,1),venueName:l0.name||"",venueAddress:l0.address||"",housing:{...S.housing,on:S.housing.on&&E("hotel"),collect:S.housing.collect&&E("needhouse")&&S.format==="site"},transfer:{...S.transfer,on:S.transfer.on&&E("transfer")},questions:qsPub(),weddingDate:`${S.date}T${S.time||"00:00"}:00`,dateLong:fmtDate(S.date),features:Object.fromEntries(Object.keys(FD).map(f=>[f,enabled(f)]))}};
+const pubCfg=()=>{const{prices,plan,feat,musicId,colors,notes,token,responses,status,trialMin,firstOpen,expiresAt,archived,id,created,templateName,questions,notify,endpoint,publicUrl,publishedAt,days,locs,housing,fonts,...p}=S;const l0=S.locs[0]||{},E=enabled;return{...p,projectName:S.projectName,publicSlug:S.publicSlug,canvas:cvPub(),fonts:fontsCfg(S.fonts),days:E("days")?S.days:S.days.slice(0,1),program:E("days")?S.program:S.program.map(e=>({...e,day:0})),locs:E("events")?S.locs:S.locs.slice(0,1),venueName:l0.name||"",venueAddress:l0.address||"",housing:{...S.housing,on:S.housing.on&&E("hotel"),collect:S.housing.collect&&E("needhouse")&&S.format==="site"},transfer:{...S.transfer,on:S.transfer.on&&E("transfer")},questions:qsPub(),weddingDate:`${S.date}T${S.time||"00:00"}:00`,dateLong:fmtDate(S.date),features:Object.fromEntries(Object.keys(FD).map(f=>[f,enabled(f)]))}};
 function vars(c=S.colors,f=S.fonts){return{"--milk":c.bg,"--milk2":mix(c.bg,c.text,.06),"--sage":c.soft,"--sage2":mix(c.soft,c.bg,.55),"--forest":c.accent,"--gold":c.decor,"--gold2":c.line,"--ink":c.text,"--soft":mix(c.text,c.bg,.4),"--serif":fstack(f.head),"--fnames":fstack(f.names),"--sans":fstack(f.body),"--facc":fstack(f.acc)}}
 const photoMsg=()=>({type:"photos",cv:cvUrls(),hero:URLS.get(S.heroId)||null,gallery:S.galleryIds.map(i=>URLS.get(i)).filter(Boolean),dress:S.dressIds.map(i=>URLS.get(i)).filter(Boolean),housing:S.housingIds.map(i=>URLS.get(i)).filter(Boolean),extra:S.extraIds.map(i=>URLS.get(i)).filter(Boolean),heroX:S.heroX.map(x=>URLS.get(x.id)||null),map:Object.fromEntries([...S.program.map(p=>p.photoId),...S.questions.flatMap(q=>q.optImg||[])].filter(i=>i&&URLS.get(i)).map(i=>[i,URLS.get(i)]))});
 const musMsg=()=>({type:"music",url:URLS.get(S.musicId)||null});
@@ -467,14 +450,15 @@ function small(){pubMode();accInfo();pubInfo();$("#bn").textContent=S.groom+" и
 window.addEventListener("message",e=>{if(e.source!==pv.contentWindow||!e.data)return;if(e.data.type==="ready"){ready=true;lastVK="";push();sendPhotos()}else if(e.data.type==="rsvp")addResp(e.data.data);else if(e.data.type==="openurl")openExternal(e.data.url)});
 
 /* ---- tabs ---- */
-const TABS=[["orders","Заказы"],["tpl","Шаблоны"],["main","Основное"],["date","Дата"],["photo","Фото и видео"],["prog","Программа"],["addr","Адрес"],["dress","Дресс-код"],["house","Проживание"],["transfer","Трансфер"],["extra","Доп. информация"],["music","Музыка"],["text","Оформление"],["canvas","Редактор главной страницы"],["quiz","Анкета"],["resp","Ответы"],["pub","Публикация"],["access","Доступ"],["plan","Тариф"],["data","Данные"],["svc","Сервис"]];
+const TABS=[["orders","Проекты"],["tpl","Шаблоны"],["main","Основное"],["date","Дата"],["photo","Фото и видео"],["prog","Программа"],["addr","Адрес"],["dress","Дресс-код"],["house","Проживание"],["transfer","Трансфер"],["extra","Доп. информация"],["music","Музыка"],["text","Оформление"],["canvas","Редактор главной страницы"],["quiz","Анкета"],["pub","Публикация"],["plan","Тариф"],["data","Данные"]];
 function applyTabs(){renderQuiz();$("#progList").classList.toggle("noev",!enabled("events"));$$("#tabs button").forEach(b=>{const f={dress:"dress",music:"music",quiz:"rsvp",resp:"rsvp",house:"hotel",transfer:"transfer",extra:"extra"}[b.dataset.t];b.hidden=f?!enabled(f):false})}
 $("#tabs").innerHTML=TABS.map(t=>`<button role="tab" data-t="${t[0]}">${t[1]}</button>`).join("");
 function show(id){document.body.classList.toggle("cvon",id==="canvas");if(id!=="canvas"){cvFlush();if(CV.fs)cvFs(false)}if(id==="canvas")setTimeout(cvOpen,0);$$(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+id));$$("#tabs button").forEach(b=>{const on=b.dataset.t===id;b.setAttribute("aria-selected",on);if(on)b.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"})});scrollTo(0,0);try{sessionStorage.setItem("inv-tab",id)}catch(e){}}
 $("#tabs").onclick=e=>{const b=e.target.closest("button");if(b)show(b.dataset.t)};
 
 /* ---- fields ---- */
-$$("[data-k]").forEach(el=>el.addEventListener("input",()=>{S[el.dataset.k]=el.value;changed()}));
+$$("[data-k]").forEach(el=>el.addEventListener("input",()=>{S[el.dataset.k]=el.value; if(el.dataset.k==="publicSlug")el.dataset.manual="1"; if(el.dataset.k==="projectName"){const sl=$("[data-k=publicSlug]");if(sl&&!sl.dataset.manual){S.publicSlug=slugifyWedding(el.value);sl.value=S.publicSlug}} changed()}));
+function slugifyWedding(v){const map={а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ф:"f",х:"h",ц:"ts",ч:"ch",ш:"sh",щ:"sch",ъ:"",ы:"y",ь:"",э:"e",ю:"yu",я:"ya"};return String(v||"").toLowerCase().split("").map(c=>map[c]??c).join("").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,70)}
 const fillForm=()=>$$("[data-k]").forEach(el=>el.value=S[el.dataset.k]??"");
 
 /* ---- photos ---- */
@@ -575,7 +559,7 @@ $("#reset").onclick=async()=>{if(!await ask("Вернуть демо-данны�
 const STAT={trial:"пробный",active:"активен",off:"отключён"};let showArch=false;
 const go=i=>{cur=i;S=ORD[i];simGuest=false;fillForm();renderAll();push();sendPhotos();save();cvEnsure().then(()=>{push();sendPhotos()})};
 function renderOrders(){$("#nPlan").innerHTML=Object.entries(PLANS).map(([k,p])=>`<option value="${k}">${p.n}</option>`).join("");fillTplSel();
- $("#ordList").innerHTML=ORD.map((o,i)=>o.archived&&!showArch?"":`<div class="oc ${i===cur?"cur":""} ${o.archived?"arch":""}" data-i="${i}"><b>${esc(o.groom)} и ${esc(o.bride)}</b><small>${o.format==="card"?"Открытка":"Сайт"} · ${PLANS[o.plan].n} · ${STAT[o.status]}${o.status==="active"&&o.expiresAt?" до "+o.expiresAt:""}${o.archived?" · в архиве":""}</small><small>Ответов: ${o.responses.length}${i===cur?" · открыт в редакторе":""}</small><div class="row"><button class="btn" data-o="open">Открыть</button><button class="btn g" data-o="dup">Копия</button><button class="btn g" data-o="arc">${o.archived?"Из архива":"В архив"}</button><button class="btn d" data-o="del">Удалить</button></div></div>`).join("")||`<p class="hint">Заказов нет.</p>`}
+ $("#ordList").innerHTML=ORD.map((o,i)=>o.archived&&!showArch?"":`<div class="oc ${i===cur?"cur":""} ${o.archived?"arch":""}" data-i="${i}"><b>${esc(o.projectName||((o.groom||"")+" и "+(o.bride||"")))}</b><small>${o.format==="card"?"Открытка":"Сайт"} · ${PLANS[o.plan].n}${o.archived?" · архив":""}${i===cur?" · открыт в редакторе":""}</small><div class="row"><button class="btn" data-o="open">Открыть редактор</button></div></div>`).join("")||`<p class="hint">Заказов нет.</p>`}
 function fillTplSel(){const f=$("#nFmt").value,v=$("#nTpl").value;$("#nTpl").innerHTML=allT().filter(t=>t.fmt==="both"||t.fmt===f).map(t=>`<option value="${t.id}">${esc(t.cat)}: ${esc(t.name)}</option>`).join("");if(v)$("#nTpl").value=v}
 $("#nFmt").onchange=fillTplSel;$("#showArch").onchange=e=>{showArch=e.target.checked;renderOrders()};
 $("#newOrd").onclick=()=>{const g=$("#nG").value.trim(),b=$("#nB").value.trim();if(!g||!b)return toast("Укажите имена жениха и невесты");const t=allT().find(x=>x.id===$("#nTpl").value)||BUILTIN[0];
@@ -1048,11 +1032,38 @@ async function pdfOut(){const fresh=!PDF.blob;if(fresh)await pdfBuild();if(!PDF.
  /* share можно вызывать только пока жив тап пользователя; после долгой сборки он уже истёк */
  if(act&&navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:"Приглашение"});pdfLink();return}catch(e){if(e&&e.name==="AbortError"){pdfLink();return}}}
  pdfSave();toast(fresh?"PDF готов. Если файл не скачался, нажмите «Скачать PDF» ниже":"PDF сохранён")}
-/* ---- publish ---- */
-function pubInfo(){const p=$("#pubInfo");if(!p)return;p.textContent=S.publicUrl?(S.publishedAt?"Опубликовано "+new Date(S.publishedAt).toLocaleDateString("ru-RU")+". После правок соберите файл и загрузите заново.":"Ссылка записана, но заказ ещё не отмечен как опубликованный."):"Ссылка пока не указана."}
-$("#gBtn").addEventListener("click",()=>{$("#gName").textContent="Имя файла для загрузки: "+S.token+".html"});
-$("#markPub").onclick=()=>{if(!S.publicUrl)return toast("Сначала вставьте публичную ссылку");S.publishedAt=Date.now();save();pubInfo();renderOrders();toast("Заказ отмечен как опубликованный")};
-$("#cpPub").onclick=()=>{if(S.publicUrl)copyText(S.publicUrl);else toast("Ссылка пока не указана")};
+/* ---- publish: one-click upload to Yandex Object Storage ---- */
+function pubInfo(){const p=$("#pubInfo");if(!p)return;p.textContent=S.publicUrl?(S.publishedAt?"Опубликовано "+new Date(S.publishedAt).toLocaleString("ru-RU")+". При изменениях нажмите «Опубликовать / обновить сайт» ещё раз.":"Ссылка сохранена."):"Сайт ещё не опубликован."}
+$("#makeSlug").onclick=()=>{S.publicSlug=slugifyWedding(S.projectName||(`${S.groom} ${S.bride}`));const el=$("[data-k=publicSlug]");if(el){el.value=S.publicSlug;el.dataset.manual="1"}changed();toast("Адрес сформирован")};
+async function publishInvitation(){
+ if(S.format==="card")return toast("Для открытки используйте создание PDF-файла.");
+ if(!cloudReady)throw new Error("Сначала войдите в Wedding Studio и дождитесь подключения к облаку");
+ if(!S.projectName)S.projectName=`Свадьба ${S.groom} и ${S.bride}`;
+ if(!S.publicSlug)S.publicSlug=slugifyWedding(S.projectName);
+ if(!S.publicSlug)throw new Error("Укажите название проекта или короткий адрес");
+ const slug=S.publicSlug.replace(/[^a-z0-9-]/g,"").replace(/-+/g,"-").replace(/^-|-$/g,"").slice(0,70);
+ if(!slug)throw new Error("Короткий адрес должен содержать латинские буквы или цифры");
+ $("#publishNow").disabled=true;$("#publishNow").textContent="Публикация…";$("#gInfo").textContent="Синхронизируем заказ и собираем приглашение…";
+ try{
+  const html=await buildGuest();
+  const blob=new Blob([html],{type:"text/html"});
+  $("#gInfo").textContent=`Файл собран (${(blob.size/1048576).toFixed(2)} МБ). Загружаем в Яндекс Object Storage…`;
+  const {data:linkRows,error:linkError}=await sb.from("links").select("id,token,blocked").eq("order_id",S._cloudId).eq("kind","main").limit(1);
+  if(linkError||!linkRows||!linkRows.length)throw new Error("Не найдена основная ссылка заказа");
+  if(linkRows[0].blocked){const {error}=await sb.from("links").update({blocked:false}).eq("id",linkRows[0].id);if(error)throw new Error("Не удалось включить ссылку приглашения: "+error.message)}
+  const fileName=slug+".html";
+  const signed=await sb.functions.invoke("media-storage",{body:{action:"sign-upload",orderId:S._cloudId,category:"invitation",contentType:"text/html",size:blob.size,fileName,slug}});
+  if(signed.error)throw signed.error;const a=signed.data||{};if(!a.ok||!a.uploadUrl||!a.objectKey)throw new Error(a.error||"Не удалось получить ссылку загрузки");
+  const put=await fetch(a.uploadUrl,{method:"PUT",headers:{"Content-Type":"text/html"},body:blob});if(!put.ok)throw new Error("Яндекс Object Storage: ошибка загрузки ("+put.status+")");
+  const done=await sb.functions.invoke("media-storage",{body:{action:"complete-upload",orderId:S._cloudId,category:"invitation",contentType:"text/html",size:blob.size,fileName,objectKey:a.objectKey,slug}});
+  if(done.error)throw done.error;if(!done.data||!done.data.ok)throw new Error(done.data&&done.data.error||"Не удалось завершить публикацию");
+  S.publicUrl=done.data.publicUrl;S.publishedAt=Date.now();S.publicSlug=slug;save();fillForm();pubInfo();statsInfo();renderOrders();$("#gInfo").textContent="Приглашение опубликовано и доступно по ссылке.";$("#gName").textContent="Файл: "+fileName;toast("Приглашение опубликовано!");
+ }catch(e){console.error("Wedding invitation publish",e);$("#gInfo").textContent="Ошибка публикации: "+errMsg(e);toast("Не удалось опубликовать: "+errMsg(e))}
+ finally{$("#publishNow").disabled=false;$("#publishNow").textContent="Опубликовать / обновить сайт"}
+}
+$("#publishNow").onclick=publishInvitation;
+$("#cpPub").onclick=()=>{if(S.publicUrl)copyText(S.publicUrl);else toast("Сначала опубликуйте приглашение")};
+$("#openPub").onclick=()=>{if(S.publicUrl)window.open(S.publicUrl,"_blank","noopener");else toast("Сначала опубликуйте приглашение")};
 $("#diagBtn").onclick=async()=>{const L=["Браузер: "+navigator.userAgent.slice(0,90),"Хранение фото: "+(PS.mode==="idb"?"IndexedDB (постоянное)":"только память страницы")];
  try{const r=indexedDB.open("inv-diag",1),db=await new Promise((res,rej)=>{r.onupgradeneeded=()=>r.result.createObjectStore("t");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
   await new Promise((res,rej)=>{const x=db.transaction("t","readwrite");x.objectStore("t").put(new Blob(["x"]),"b");x.oncomplete=res;x.onerror=()=>rej(x.error)});db.close();L.push("Тест записи IndexedDB: успешно")}catch(e){L.push("Тест записи IndexedDB: ошибка, "+errMsg(e))}
@@ -1064,7 +1075,7 @@ try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}ca
 $("#fab").onclick=()=>document.body.classList.add("pv");$("#pvx").onclick=()=>document.body.classList.remove("pv");
 $("#replay").onclick=()=>pv.contentWindow.postMessage({type:"replay"},"*");
 addEventListener("keydown",e=>{if(e.key==="Escape")document.body.classList.remove("pv")});
-function renderAll(){pubMode();renderProg();renderLook();renderPhotos();renderCols();renderMusic();renderPlan();renderFormat();renderOrders();renderTpl();renderQuiz();renderResp();renderDays();renderLocs();renderHouse();renderTransfer();renderVideo();$$("[data-nt]").forEach(c=>c.checked=!!S.notify[c.dataset.nt]);small()}
+function renderAll(){pubMode();renderProg();renderLook();renderPhotos();renderCols();renderMusic();renderPlan();renderFormat();renderOrders();renderTpl();renderQuiz();renderResp();renderDays();renderLocs();renderHouse();renderTransfer();renderVideo();$$("[data-nt]").forEach(c=>c.checked=!!S.notify[c.dataset.nt]);small();if(window.wsStatsInfo)window.wsStatsInfo()}
 $("#dev").onclick=()=>{document.body.classList.toggle("wide");$("#dev").textContent=document.body.classList.contains("wide")?"Телефон":"Компьютер"};
 
 (async()=>{
@@ -1087,7 +1098,7 @@ window.dispatchEvent(new Event("wedding-supabase-ready"));
 #wsAuth button{width:100%;border:0;border-radius:10px;padding:13px 16px;margin-top:12px;background:#34503d;color:white;font-size:15px;font-weight:600;cursor:pointer}
 #wsAuth button.alt{background:transparent;color:#34503d;border:1px solid #aebda9}#wsAuth button:disabled{opacity:.55;cursor:wait}
 #wsAuth .ws-msg{min-height:20px;margin-top:12px;font-size:13px;color:#9b4d3e;white-space:pre-wrap}#wsAuth .ws-msg.ok{color:#34503d}
-#wsCloudPill{position:fixed;right:12px;top:calc(10px + env(safe-area-inset-top));z-index:5000;background:#34503d;color:#fff;border-radius:99px;padding:7px 11px;font:12px Arial,sans-serif;box-shadow:0 3px 14px #0002;display:none;align-items:center;gap:8px}
+#wsCloudPill{position:fixed;right:12px;top:calc(10px + env(safe-area-inset-top));z-index:5000;background:#34503d;color:#fff;border-radius:18px;padding:7px 11px;font:12px Arial,sans-serif;box-shadow:0 3px 14px #0002;display:none;align-items:center;gap:8px;max-width:calc(100vw - 24px);box-sizing:border-box}#wsCloudText{overflow-wrap:anywhere;min-width:0}
 #wsCloudPill button{border:0;background:#ffffff22;color:#fff;border-radius:99px;padding:5px 8px;font-size:11px}
 body.ws-locked{overflow:hidden}
 </style>
@@ -1108,18 +1119,23 @@ const SUPABASE_ANON_JWT="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 const EMAIL_DEFAULT="egorkinmaks7@gmail.com";
 const $id=id=>document.getElementById(id);
 const authBox=$id("wsAuth"),authMsg=$id("wsAuthMsg"),pill=$id("wsCloudPill"),pillText=$id("wsCloudText");
-let sb=null,cloudReady=false,cloudBusy=false,cloudLoading=false,cloudTimer=0,activeUser=null;
+let sb=null,cloudReady=false,cloudBusy=false,cloudLoading=false,cloudTimer=0,activeUser=null,cloudLastError="";
 const hadLocalOrders=!!localStorage.getItem("inv-orders-v2");
 const locks=new Map();
 function authMessage(s,ok=false){authMsg.textContent=s;authMsg.classList.toggle("ok",ok)}
 function showAuth(s){authBox.classList.add("on");document.body.classList.add("ws-locked");pill.style.display="none";if(s)authMessage(s)}
 function hideAuth(){authBox.classList.remove("on");document.body.classList.remove("ws-locked");pill.style.display="flex"}
-function cloudStatus(s){pillText.textContent=s}
+function cloudStatus(s){pillText.textContent=s;pill.title=s}
+function statsInfo(){const baseInput=$id("statsBase"),out=$id("statsLink"),info=$id("statsInfo");if(!baseInput||!out)return;const base=localStorage.getItem("ws-guest-stats-base")||"";if(document.activeElement!==baseInput)baseInput.value=base;if(!S||!S._cabinetToken){out.value="Сначала сохраните заказ в облаке";if(info)info.textContent="Токен статистики появится после первой синхронизации заказа.";return}if(!base){out.value="Укажите адрес гостевого приложения";if(info)info.textContent="Вставьте URL опубликованного guest-stats.html и сохраните его.";return}try{const u=new URL(base);u.searchParams.set("t",S._cabinetToken);out.value=u.href;if(info)info.textContent="Персональная ссылка статистики для этого заказа. Не публикуйте её в открытом доступе."}catch(e){out.value="Некорректный адрес гостевого приложения"}}
+window.wsStatsInfo=statsInfo;
+const statsSave=$id("saveStatsBase");if(statsSave)statsSave.onclick=()=>{const v=$id("statsBase").value.trim();if(v&&!/^https:\/\//i.test(v))return toast("Нужен полный HTTPS-адрес");try{if(v)new URL(v)}catch(e){return toast("Некорректный адрес")};localStorage.setItem("ws-guest-stats-base",v);statsInfo();toast("Адрес гостевого приложения сохранён")};
+const statsCopy=$id("copyStatsLink");if(statsCopy)statsCopy.onclick=()=>{const v=$id("statsLink").value;if(v&&v.startsWith("https://"))copyText(v);else toast("Сначала настройте ссылку статистики")};
+const statsOpen=$id("openStatsLink");if(statsOpen)statsOpen.onclick=()=>{const v=$id("statsLink").value;if(v&&v.startsWith("https://"))window.open(v,"_blank","noopener");else toast("Сначала настройте ссылку статистики")};
 function clone(o){return JSON.parse(JSON.stringify(o))}
 function getCanvasStore(){try{return JSON.parse(localStorage.getItem(CVK))||{}}catch(e){return{}}}
 function putCanvasStore(v){try{localStorage.setItem(CVK,JSON.stringify(v))}catch(e){}}
 function packOrder(o){const d=clone(o);delete d._cloudId;delete d._cabinetToken;delete d._starterDemo;d.mediaMap=d.mediaMap||{};d.canvasMap=d.canvasMap||{};d.canvasData=getCanvasStore()[o.id]||d.canvasData||null;return d}
-function orderRow(o){return {id:o._cloudId,token:o.token,couple_names:[o.groom,o.bride].filter(Boolean).join(" и "),format:o.format||"site",plan:o.plan||"basic",status:o.status||"trial",trial_minutes:Number(o.trialMin)||30,first_opened_at:o.firstOpen?(typeof o.firstOpen==="number"?new Date(o.firstOpen).toISOString():o.firstOpen):null,expires_at:o.expiresAt||null,archived:!!o.archived,data:packOrder(o),notes:o.notes||null}}
+function orderRow(o){return {id:o._cloudId,token:o.token,couple_names:o.projectName||[o.groom,o.bride].filter(Boolean).join(" и "),format:o.format||"site",plan:o.plan||"basic",status:o.status||"trial",trial_minutes:Number(o.trialMin)||30,first_opened_at:o.firstOpen?(typeof o.firstOpen==="number"?new Date(o.firstOpen).toISOString():o.firstOpen):null,expires_at:o.expiresAt||null,archived:!!o.archived,data:packOrder(o),notes:o.notes||null}}
 async function ensureCloudOrder(o){
  if(o._cloudId)return o._cloudId;
  o._cloudId=crypto.randomUUID();
@@ -1172,16 +1188,17 @@ async function upsertOrder(o){
  const row=orderRow(o);
  const {error}=await sb.from("orders").upsert(row,{onConflict:"id"});
  if(error)throw error;
+ statsInfo();
 }
 async function syncOrder(o){
  if(!cloudReady||cloudLoading||!o)return;
  const key=o.id;if(locks.has(key))return locks.get(key);
- const task=(async()=>{try{await upsertOrder(o);return true}catch(e){console.error("Wedding Studio cloud sync",e);cloudStatus("Ошибка синхронизации");return false}finally{locks.delete(key)}})();locks.set(key,task);return task;
+ const task=(async()=>{try{await upsertOrder(o);cloudLastError="";return true}catch(e){const parts=[e&&e.message,e&&e.code,e&&e.details,e&&e.hint].filter(Boolean);cloudLastError=parts.join(" | ")||String(e||"Неизвестная ошибка");console.error("Wedding Studio cloud sync",e);cloudStatus("Ошибка: "+cloudLastError.slice(0,90));return false}finally{locks.delete(key)}})();locks.set(key,task);return task;
 }
 function scheduleSync(){if(!cloudReady||cloudLoading)return;clearTimeout(cloudTimer);cloudTimer=setTimeout(async()=>{
- cloudBusy=true;cloudStatus("Синхронизация…");let ok=true;
+ cloudBusy=true;cloudLastError="";cloudStatus("Синхронизация…");let ok=true;
  for(const o of ORD.filter(x=>!x._starterDemo)){const r=await syncOrder(o);if(r===false)ok=false}
- cloudBusy=false;cloudStatus(ok?"Облако: синхронизировано":"Облако: ошибка — проверьте соединение");
+ cloudBusy=false;cloudStatus(ok?"Облако: синхронизировано":"Ошибка облака: "+(cloudLastError||"подробности в консоли"));
 },850)}
 async function fetchResponses(rows){
  if(!rows.length)return;
