@@ -277,23 +277,29 @@ body.cvon .fab{display:none}#p-canvas.cvfs .cvdock{position:static;margin:8px 0 
 
  <section class="panel" id="p-pub"><h2>Публикация</h2>
   <p class="hint">Публикуйте приглашение прямо из Wedding Studio. Файл автоматически отправляется в ваше Яндекс-хранилище, а ссылка создаётся сама. Никаких Netlify, папок и ручной загрузки.</p>
-  <div class="box"><h3>1. Название и адрес сайта</h3>
+  <div class="box" data-for="card"><h3>Соберите PDF-открытку</h3>
+   <p class="hint" style="margin:0 0 10px">Многостраничный PDF в формате телефона: без ответов гостей, без опросов, без музыки и видео, без конверта. Данные никуда не отправляются, всё собирается на вашем устройстве. Ссылки на карты в файле нажимаются.</p>
+   <div class="row" style="margin-top:0"><button class="btn" id="gBtn" type="button">Создать PDF</button><button class="btn g" id="gSh" type="button">Отправить / сохранить PDF</button></div>
+   <p class="hint" id="pInfo" style="margin:10px 0 0"></p>
+   <p class="hint" id="pName" style="margin:6px 0 0"></p>
+  </div>
+  <div class="box" data-for="site"><h3>1. Название и адрес сайта</h3>
    <label class="f"><span>Название проекта</span><input data-k="projectName" maxlength="120" placeholder="Свадьба Максимки и Анастасии"></label>
    <label class="f"><span>Короткий адрес (латиницей)</span><input data-k="publicSlug" maxlength="70" autocapitalize="none" placeholder="maxim-i-anastasiya"></label>
    <button class="btn g" id="makeSlug" type="button">Сформировать адрес из названия</button>
    <p class="hint" style="margin:8px 0 0">Название видно в списке проектов. Короткий адрес используется в имени опубликованного файла.</p>
   </div>
-  <div class="box"><h3>2. Опубликовать приглашение</h3>
+  <div class="box" data-for="site"><h3>2. Опубликовать приглашение</h3>
    <button class="btn" id="publishNow" type="button">Опубликовать / обновить сайт</button>
    <p class="hint" id="gInfo" style="margin:10px 0 0"></p>
    <p class="hint" id="gName" style="margin:6px 0 0"></p>
   </div>
-  <div class="box"><h3>3. Ссылка на приглашение</h3>
+  <div class="box" data-for="site"><h3>3. Ссылка на приглашение</h3>
    <label class="f"><span>Публичная ссылка для всех приглашённых</span><input data-k="publicUrl" inputmode="url" autocapitalize="none" placeholder="Появится после публикации" readonly></label>
    <div class="row" style="margin-top:0"><button class="btn g" id="cpPub">Копировать ссылку</button><button class="btn g" id="openPub" type="button">Открыть приглашение</button></div>
    <p class="hint" id="pubInfo" style="margin:10px 0 0"></p>
   </div>
-  <div class="box"><h3>4. Ссылки для клиента</h3>
+  <div class="box" data-for="site"><h3>4. Ссылки для клиента</h3>
    <p class="hint" style="margin:0 0 10px">Это отдельная персональная страница с ответами и статистикой именно этой свадьбы. Ссылку передавайте жениху и невесте, не всем гостям.</p>
    <label class="f"><span>Адрес приложения статистики (указывается один раз)</span><input id="statsBase" inputmode="url" autocapitalize="none" placeholder="https://ваш-сайт-статистики.pages.dev"></label>
    <button class="btn g" id="saveStatsBase" type="button">Сохранить адрес приложения</button>
@@ -436,7 +442,7 @@ const KEY="inv-orders-v2";let ORD=[],cur=0;
  let old=null;try{old=JSON.parse(localStorage.getItem(LS))}catch(e){}ORD=[clean(old)];cur=0})();
 let S=ORD[cur];
 if(!S.projectName)S.projectName=`Свадьба ${S.groom||""} и ${S.bride||""}`.trim();
-const enabled=f=>S.format==="card"&&RSVP_ONLY.has(f)?false:S.feat[f]!==undefined?S.feat[f]:RANK[S.plan]>=RANK[FD[f].min];
+const enabled=f=>S.format==="card"&&(RSVP_ONLY.has(f)||f==="music"||f==="video")?false:S.feat[f]!==undefined?S.feat[f]:RANK[S.plan]>=RANK[FD[f].min];
 /* Подготовка к серверу: сейчас ответы гостей нигде не хранятся, кроме браузера гостя. Позже сюда подключается Supabase. */
 
 /* ---- IndexedDB ---- */
@@ -579,8 +585,8 @@ $("#doImp").onclick=async()=>{const t=$("#impTa").value.trim();if(!t)return toas
   ns.id=S.id;ns.token=S.token;ns.responses=S.responses;ns.status=S.status;ns.expiresAt=S.expiresAt;ns.firstOpen=S.firstOpen;ns.archived=S.archived;ns.trialMin=S.trialMin;ns._cloudId=S._cloudId;ns._cabinetToken=S._cabinetToken;ns._acc=S._acc;ns.mediaMap=S.mediaMap;ns.canvasMap=S.canvasMap;ns.videoId=S.videoId;ns.videoPosterId=S.videoPosterId;ns.videoName=S.videoName;ORD[cur]=S=ns;fillForm();renderAll();push();sendPhotos();save();$("#impTa").value="";toast("Настройки импортированы")}catch(err){console.error(err);toast("Не удалось импортировать")}};
 let guestHtml="";
 async function buildGuest(){await cvEnsure();const msgs=[{type:"cfg",cfg:pubCfg(),vars:vars()},photoMsg(),musMsg(),vidMsg()];const srv=S.endpoint?"<script>window.__SERVER="+JSON.stringify({url:S.endpoint,token:S.token}).replace(/</g,"\\u003c")+"<\/script>":"";const boot="<script>window.__BOOT="+JSON.stringify(msgs).replace(/</g,"\\u003c")+"<\/script>";return INVITE.replace("<script>",()=>srv+boot+"<script>")}
-if($("#gBtn"))$("#gBtn").onclick=async()=>{if(S.format==="card")return pdfBuild();toast("Сборка…",true);guestHtml=await buildGuest();$("#gInfo").textContent=`Файл собран: ${(guestHtml.length/1048576).toFixed(1)} МБ. Редактора и цен в нём нет.`;toast("Готово")};
-if($("#gSh"))$("#gSh").onclick=async()=>{if(S.format==="card")return pdfOut();if(!guestHtml)guestHtml=await buildGuest();$("#gInfo").textContent=`Файл собран: ${(guestHtml.length/1048576).toFixed(1)} МБ. Редактора и цен в нём нет.`;shareFile(S.token+".html","text/html",guestHtml,"Свадебное приглашение")};
+$("#gBtn").onclick=()=>{pdfBuild()};
+$("#gSh").onclick=()=>{pdfOut()};
 $("#reset").onclick=async()=>{if(!await ask("Вернуть демо-данные в этом заказе и удалить его фото, музыку и видео? Другие заказы не изменятся.","Сбросить"))return;for(const id of idsOf(S))await rmPhoto(id);const keep={id:S.id,token:S.token,responses:S.responses,status:S.status,expiresAt:S.expiresAt,firstOpen:S.firstOpen,archived:S.archived,trialMin:S.trialMin,_cloudId:S._cloudId,_cabinetToken:S._cabinetToken,_acc:S._acc};ORD[cur]=S=Object.assign(DEMO(),keep);fillForm();renderAll();push();sendPhotos();save();toast("Демо-данные восстановлены")};
 
 /* ---- orders ---- */
@@ -975,9 +981,9 @@ const cvTpEnd=ev=>{if(!TP.has(ev.pointerId))return;TP.delete(ev.pointerId);if(CV
 cvEl.addEventListener("pointerup",cvTpEnd,true);cvEl.addEventListener("pointercancel",cvTpEnd,true);
 /* ---- Открытка: многостраничный PDF (без ответов гостей и без «конверта») ---- */
 const PDF={blob:null,name:"",busy:false},SC=2,imgCache=new Map();
-function pubMode(){const card=S.format==="card",b=$$("#p-pub .box"),h=$("#p-pub>.hint");if(!b.length)return;if(h){if(!h.dataset.o)h.dataset.o=h.textContent;h.textContent=card?"Открытка собирается в многостраничный PDF: без ответов гостей и без конверта. Готовый файл можно скачать и отправить гостям в мессенджере или почте. Ссылки на карты в нём нажимаются.":h.dataset.o}
- [1,2,3].forEach(i=>{if(b[i])b[i].style.display=card?"none":""});b[0].querySelector("h3").textContent=card?"Соберите PDF-открытку":"1. Соберите файл";
- if($("#gBtn"))$("#gBtn").textContent=card?"Создать PDF":"Собрать";if($("#gSh"))$("#gSh").textContent=card?"Отправить / сохранить PDF":"Сохранить файл"}
+function pubMode(){const card=S.format==="card",h=$("#p-pub>.hint");
+ if(h){if(!h.dataset.o)h.dataset.o=h.textContent;h.textContent=card?"Открытка собирается в многостраничный PDF: без ответов гостей, без конверта, без музыки и видео. Готовый файл можно скачать и отправить гостям в мессенджере или почте.":h.dataset.o}
+ $$("#p-pub [data-for]").forEach(b=>{b.style.display=b.dataset.for===(card?"card":"site")?"":"none"})}
 const loadImg=u=>{if(!u)return Promise.resolve(null);if(!imgCache.has(u))imgCache.set(u,new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=u}));return imgCache.get(u)};
 function pxFilter(cv,fl){const ops=[];fl.replace(/([\w-]+)\(([^)]*)\)/g,(m,n,v)=>{v=v.trim();let x=parseFloat(v);if(/%$/.test(v))x/=100;ops.push([n,x])});
  const g=cv.getContext("2d"),d=g.getImageData(0,0,cv.width,cv.height),a=d.data,cp=v=>v<0?0:v>1?1:v;
@@ -1051,9 +1057,9 @@ async function pdfBuild(){if(PDF.busy)return;PDF.busy=true;toast("Создаю P
   if(S.footer){need(90);y+=16;txt(S.footer,"names",26,C.accent,{st:"italic",lh:1.25})}
   const out=[];for(const p of pages){const b=await new Promise(r=>p.cv.toBlob(r,"image/jpeg",.92));out.push({jpg:new Uint8Array(await b.arrayBuffer()),links:p.links});p.cv.width=p.cv.height=0}
   imgCache.clear();PDF.blob=makePdf(out,W,H);PDF.name=("Приглашение "+S.groom+" и "+S.bride+".pdf").replace(/[\\/:*?"<>|]/g,"");
-  $("#gInfo").textContent="PDF готов: страниц "+out.length+", "+(PDF.blob.size/1048576).toFixed(1)+" МБ. Без ответов гостей и без конверта.";$("#gName").textContent="Файл: "+PDF.name;pdfLink();toast("PDF готов")}
- catch(err){console.error(err);toast("PDF не создан: "+errMsg(err))}finally{PDF.busy=false}}
-function pdfLink(){const old=$("#pdfDl");if(old)old.remove();if(!PDF.blob)return;const u=URL.createObjectURL(PDF.blob),a=document.createElement("a");a.id="pdfDl";a.href=u;a.download=PDF.name;a.textContent="Скачать PDF: "+PDF.name;a.style.cssText="display:block;margin:12px 0;padding:12px 14px;border:1px solid currentColor;border-radius:12px;text-align:center;font-weight:600;text-decoration:none;color:inherit;word-break:break-word";const h=$("#gInfo");h&&h.parentNode?h.parentNode.insertBefore(a,h.nextSibling):document.body.appendChild(a);return a}
+  $("#pInfo").textContent="PDF готов: страниц "+out.length+", "+(PDF.blob.size/1048576).toFixed(1)+" МБ. Без ответов гостей и без конверта.";$("#pName").textContent="Файл: "+PDF.name;pdfLink();toast("PDF готов")}
+ catch(err){console.error(err);$("#pInfo").textContent="PDF не создан: "+errMsg(err);toast("PDF не создан: "+errMsg(err))}finally{PDF.busy=false}}
+function pdfLink(){const old=$("#pdfDl");if(old)old.remove();if(!PDF.blob)return;const u=URL.createObjectURL(PDF.blob),a=document.createElement("a");a.id="pdfDl";a.href=u;a.download=PDF.name;a.textContent="Скачать PDF: "+PDF.name;a.style.cssText="display:block;margin:12px 0;padding:12px 14px;border:1px solid currentColor;border-radius:12px;text-align:center;font-weight:600;text-decoration:none;color:inherit;word-break:break-word";const h=$("#pInfo");h&&h.parentNode?h.parentNode.insertBefore(a,h.nextSibling):document.body.appendChild(a);return a}
 function pdfSave(){const a=pdfLink();if(!a)return false;try{a.click()}catch(e){}return true}
 async function pdfOut(){const fresh=!PDF.blob;if(fresh)await pdfBuild();if(!PDF.blob)return;
  const f=new File([PDF.blob],PDF.name,{type:"application/pdf"}),act=!navigator.userActivation||navigator.userActivation.isActive;
