@@ -253,8 +253,17 @@ body.cvon .fab{display:none}#p-canvas.cvfs .cvdock{position:static;margin:8px 0 
 
   <div id="legacyHidden" hidden>
   <section class="panel" id="p-resp"><div id="respSum"></div><div id="respTbl"></div><button id="respClr" type="button"></button><button id="csv" type="button"></button></section>
-  <section class="panel" id="p-access"><input id="lnk" readonly><p id="accInfo"></p><button id="cpLnk" type="button"></button><button id="newTok" type="button"></button><button id="ex6" type="button"></button><button id="ex1" type="button"></button><button id="exOff" type="button"></button><button id="trialRst" type="button"></button><button id="simG" type="button"></button><button id="simX" type="button"></button></section>
+  <section class="panel" id="p-access"><input id="lnk" readonly><p id="accInfo"></p><button id="cpLnk" type="button"></button><button id="newTok" type="button"></button><button id="ex6" type="button"></button><button id="ex1" type="button"></button><button id="exOff" type="button"></button><button id="simG" type="button"></button><button id="simX" type="button"></button></section>
   <section class="panel" id="p-svc"></section>
+  <div class="box"><h3>4. Сайт пары со статистикой</h3>
+   <p class="hint" style="margin:0 0 10px">Это отдельная персональная страница с ответами и статистикой именно этой свадьбы. Ссылку передавайте жениху и невесте, не всем гостям.</p>
+   <label class="f"><span>Адрес приложения статистики (указывается один раз)</span><input id="statsBase" inputmode="url" autocapitalize="none" placeholder="https://ваш-сайт-статистики.pages.dev"></label>
+   <button class="btn g" id="saveStatsBase" type="button">Сохранить адрес приложения</button>
+   <label class="f"><span>Персональная ссылка этой пары</span><input id="statsLink" readonly placeholder="Появится после сохранения заказа и настройки приложения"></label>
+   <div class="row" style="margin-top:0"><button class="btn g" id="copyStatsLink" type="button">Копировать ссылку статистики</button><button class="btn g" id="openStatsLink" type="button">Открыть сайт пары</button></div>
+   <p class="hint" id="statsInfo" style="margin:10px 0 0"></p>
+  </div>
+  <div class="box"><h3>Хранилище и фото</h3><p class="hint" id="diag" style="margin:0 0 10px">Нажмите «Проверить», чтобы увидеть, где браузер хранит фото.</p><button class="btn g" id="diagBtn">Проверить</button></div>
   </div>
 
   <section class="panel" id="p-canvas"><h2>Редактор главной страницы</h2>
@@ -286,18 +295,9 @@ body.cvon .fab{display:none}#p-canvas.cvfs .cvdock{position:static;margin:8px 0 
    <div class="row" style="margin-top:0"><button class="btn g" id="cpPub">Копировать ссылку</button><button class="btn g" id="openPub" type="button">Открыть приглашение</button></div>
    <p class="hint" id="pubInfo" style="margin:10px 0 0"></p>
   </div>
-  <div class="box"><h3>4. Сайт пары со статистикой</h3>
-   <p class="hint" style="margin:0 0 10px">Это отдельная персональная страница с ответами и статистикой именно этой свадьбы. Ссылку передавайте жениху и невесте, не всем гостям.</p>
-   <label class="f"><span>Адрес приложения статистики (указывается один раз)</span><input id="statsBase" inputmode="url" autocapitalize="none" placeholder="https://ваш-сайт-статистики.pages.dev"></label>
-   <button class="btn g" id="saveStatsBase" type="button">Сохранить адрес приложения</button>
-   <label class="f"><span>Персональная ссылка этой пары</span><input id="statsLink" readonly placeholder="Появится после сохранения заказа и настройки приложения"></label>
-   <div class="row" style="margin-top:0"><button class="btn g" id="copyStatsLink" type="button">Копировать ссылку статистики</button><button class="btn g" id="openStatsLink" type="button">Открыть сайт пары</button></div>
-   <p class="hint" id="statsInfo" style="margin:10px 0 0"></p>
-  </div>
-  <div class="box"><h3>Ответы гостей</h3><p class="hint" style="margin:0">Ответы автоматически сохраняются в Supabase и появляются в админ-панели и статистике этой свадьбы. При повторной публикации ссылка остаётся прежней, а содержимое приглашения обновляется.</p></div>
  </section>
 
- <section class="panel" id="p-data"><h2>Резервная копия</h2><p class="hint">Экспорт и импорт настроек текущего проекта, а также проверка локального хранилища. Управление заказами и ответами находится в админ-панели.</p>
+ <section class="panel" id="p-data"><h2>Резервная копия</h2><p class="hint">Экспорт и импорт настроек текущего проекта и сброс к демо. Заказы, ссылки и ответы гостей управляются в отдельной админ-панели.</p>
   <div class="box"><h3>Экспорт</h3>
    <label class="chk"><input type="checkbox" id="expPh" checked> Включить фотографии</label>
    <div class="row" style="margin-top:0"><button class="btn" id="expBtn">Подготовить</button><button class="btn g" id="cpBtn">Скопировать</button><button class="btn g" id="shBtn">Сохранить файл</button></div>
@@ -307,8 +307,6 @@ body.cvon .fab{display:none}#p-canvas.cvfs .cvdock{position:static;margin:8px 0 
    <input type="file" id="impFile" class="vh" accept=".json,application/json,text/plain">
    <textarea id="impTa" placeholder="Вставьте сюда код настроек или выберите файл"></textarea>
    <p class="hint" style="margin:10px 0 0">Если в файле нет фотографий, текущие фото сохранятся.</p></div>
-  <div class="box"><h3>Хранилище и фото</h3><p class="hint" id="diag" style="margin:0 0 10px">Нажмите «Проверить», чтобы увидеть, где браузер хранит фото.</p><button class="btn g" id="diagBtn">Проверить</button></div>
-  <div class="box"><h3>Облачная синхронизация</h3><p class="hint" style="margin:0">Проекты и настройки синхронизируются с Supabase, медиафайлы хранятся в Яндекс Object Storage. Ответы и статистика доступны в админ-панели.</p></div>
   <div class="box"><h3>Сброс</h3><p class="hint">Вернёт демонстрационные данные и удалит загруженные фото.</p><button class="btn d" id="reset">Сбросить к демо</button></div>
  </section>
 </div>
@@ -383,7 +381,7 @@ const DEMO=()=>({projectName:"",publicSlug:"",groom:"Александр",bride:"
  preTitle:"МЫ ЖЕНИМСЯ",coverTop:"ВАС ПРИГЛАШАЮТ",countTitle:"До нашего дня",countText:"Мы будем счастливы разделить этот день с вами.",galleryTitle:"Наши мгновения",
  programTitle:"Программа дня",programLead:"Нажмите на событие, чтобы узнать подробности.",rsvpTitle:"Вы с нами?",rsvpText:"Пожалуйста, подтвердите присутствие до 1 мая 2027 года.",footer:"С любовью, Александр и Мария",
  dressTitle:"Дресс-код",dressText:"Будем рады, если вы поддержите палитру нашего дня.",dressYes:["#b9cbb2","#f7f4ec","#d9bf8c"],dressNo:["#111111","#ffffff"],dressIds:[],
- colors:preset("sage"),fonts:defFonts(),style:"classic",heroId:null,galleryIds:[],musicId:null,musicName:"",plan:"basic",prices:{basic:500,premium:900,ultra:1500},feat:{},days:[{id:uid(),date:"2027-06-19",title:""}],locs:[{id:uid(),name:"Усадьба «Зелёный дом»",address:"Московская область, деревня Липки, ул. Садовая, 12",date:"",time:"16:00",text:"",mapUrl:""}],locTitle:"Места и маршруты",housingTitle:"Проживание",housingIds:[],hero:{mode:"current",dim:30,fx:50,fy:50,w:80,shape:"arch",ratio:"3:4",align:"center",dy:0},heroX:[mkX(),mkX()],heroLayout:{pos:"below",mode:"row"},extraTitle:"Дополнительная информация",extraText:"",extraIds:[],videoId:null,videoPosterId:null,videoName:"",videoPlace:"block",videoTitle:"Пригласительное видео",transferTitle:"Трансфер",transfer:{on:false,type:"bus",vehicle:"",meet:"",from:"",date:"",time:"",route:"",mapUrl:"",comment:""},housing:{on:false,name:"",address:"",checkIn:"",checkOut:"",terms:"",contact:"",mapUrl:"",collect:false},endpoint:"",publicUrl:"",publishedAt:null,id:uid(),token:tok(),format:"site",status:"trial",trialMin:30,firstOpen:null,expiresAt:"",archived:false,created:Date.now(),notes:"",templateName:"",storyTitle:"Наша история",storyText:"",plus:true,questions:[],responses:[],notify:{tg:false,mail:false,max:false}});
+ colors:preset("sage"),fonts:defFonts(),style:"classic",heroId:null,galleryIds:[],musicId:null,musicName:"",plan:"basic",prices:{basic:500,premium:900,ultra:1500},feat:{},days:[{id:uid(),date:"2027-06-19",title:""}],locs:[{id:uid(),name:"Усадьба «Зелёный дом»",address:"Московская область, деревня Липки, ул. Садовая, 12",date:"",time:"16:00",text:"",mapUrl:""}],locTitle:"Места и маршруты",housingTitle:"Проживание",housingIds:[],hero:{mode:"current",dim:30,fx:50,fy:50,w:80,shape:"arch",ratio:"3:4",align:"center",dy:0},heroX:[mkX(),mkX()],heroLayout:{pos:"below",mode:"row"},extraTitle:"Дополнительная информация",extraText:"",extraIds:[],videoId:null,videoPosterId:null,videoName:"",videoPlace:"block",videoTitle:"Пригласительное видео",transferTitle:"Трансфер",transfer:{on:false,type:"bus",vehicle:"",meet:"",from:"",date:"",time:"",route:"",mapUrl:"",comment:""},housing:{on:false,name:"",address:"",checkIn:"",checkOut:"",terms:"",contact:"",mapUrl:"",collect:false},endpoint:"",publicUrl:"",publishedAt:null,id:uid(),token:tok(),format:"site",status:"active",trialMin:30,firstOpen:null,expiresAt:"",archived:false,created:Date.now(),notes:"",templateName:"",storyTitle:"Наша история",storyText:"",plus:true,questions:[],responses:[],notify:{tg:false,mail:false,max:false}});
 function cleanResp(x){x=x||{};const qa={};if(x.qa&&typeof x.qa==="object")for(const k in x.qa){const v=x.qa[k];qa[str(k,"").slice(0,40)]=Array.isArray(v)?v.slice(0,20).map(s=>str(s,"")):str(v,"")}return{id:str(x.id,uid()),at:str(x.at,new Date().toISOString()),ans:["yes","no","maybe"].includes(x.ans)?x.ans:"no",name:str(x.name,"").slice(0,120),guests:Math.max(0,Math.min(20,Math.round(Number(x.guests))||0)),qa,msg:str(x.msg,""),hs:x.hs&&typeof x.hs==="object"?{need:x.hs.need===true?true:x.hs.need===false?false:null,in:str(x.hs.in,"").slice(0,10),out:str(x.hs.out,"").slice(0,10),ppl:Math.max(0,Math.min(50,Math.round(Number(x.hs.ppl))||0)),wish:str(x.hs.wish,"")}:null}}
 const str=(v,d)=>typeof v==="string"?v.slice(0,600):d;
 function clean(o){const r=DEMO();o=o&&typeof o==="object"?o:{};if(!o.fonts&&LEGACYF[o.font])o={...o,fonts:LEGACYF[o.font]};if(!Array.isArray(o.locs)&&(o.venueName||o.venueAddress))o={...o,locs:[{name:o.venueName||"",address:o.venueAddress||"",time:o.time||""}]};
@@ -400,7 +398,7 @@ function clean(o){const r=DEMO();o=o&&typeof o==="object"?o:{};if(!o.fonts&&LEGA
   else if(k==="prices"){if(v&&typeof v==="object")for(const q in PLANS){const n=Number(v[q]??v[{basic:"start",ultra:"vip"}[q]]);if(isFinite(n)&&n>=0&&n<1e7)r.prices[q]=Math.round(n)}}
   else if(k==="feat"){if(v&&typeof v==="object")for(const q in FD)if(typeof v[q]==="boolean")r.feat[q]=v[q]}
   else if(k==="format"){if(v==="card"||v==="site")r[k]=v}
-  else if(k==="status"){if(v==="trial"||v==="active"||v==="off")r[k]=v}
+  else if(k==="status"){if(v==="active"||v==="off")r[k]=v;else if(v==="trial")r[k]="active"}
   else if(k==="trialMin"){if(Number(v)>0&&Number(v)<1e5)r[k]=Math.round(v)}
   else if(k==="firstOpen"||k==="created"){if(Number.isFinite(v))r[k]=v}
   else if(k==="archived"||k==="plus"){if(typeof v==="boolean")r[k]=v}
@@ -570,12 +568,12 @@ $("#doImp").onclick=async()=>{const t=$("#impTa").value.trim();if(!t)return toas
    for(const id of idsOf(ns)){const u=o.photos[id];if(typeof u==="string"&&/^data:(image|audio)\//.test(u)){await DB.put({id,blob:d2b(u)});URLS.set(id,u)}}
    prune(new Set(URLS.keys()),ns)}
   else{for(const k of["heroId","musicId","musicName","galleryIds","dressIds","housingIds","extraIds","videoId","videoPosterId","videoName"])ns[k]=S[k];const m=new Map(S.program.map(p=>[p.id,p.photoId]));ns.program.forEach((p,i)=>{p.photoId=S.program[i]&&S.program[i].photoId||null});ns.questions.forEach(q=>{const o=S.questions.find(x=>x.id===q.id);q.optImg=o&&o.raw===q.raw?o.optImg:[]});ns.heroX.forEach((x,i)=>{x.id=(S.heroX[i]||{}).id||null})}
-  ns.id=S.id;ns.token=S.token;ns.responses=S.responses;ns.status=S.status;ns.expiresAt=S.expiresAt;ns.firstOpen=S.firstOpen;ns.videoId=S.videoId;ns.videoPosterId=S.videoPosterId;ns.videoName=S.videoName;ORD[cur]=S=ns;fillForm();renderAll();push();sendPhotos();save();$("#impTa").value="";toast("Настройки импортированы")}catch(err){console.error(err);toast("Не удалось импортировать")}};
+  ns.id=S.id;ns.token=S.token;ns.responses=S.responses;ns.status=S.status;ns.expiresAt=S.expiresAt;ns.firstOpen=S.firstOpen;ns.archived=S.archived;ns.trialMin=S.trialMin;ns._cloudId=S._cloudId;ns._cabinetToken=S._cabinetToken;ns._acc=S._acc;ns.mediaMap=S.mediaMap;ns.canvasMap=S.canvasMap;ns.videoId=S.videoId;ns.videoPosterId=S.videoPosterId;ns.videoName=S.videoName;ORD[cur]=S=ns;fillForm();renderAll();push();sendPhotos();save();$("#impTa").value="";toast("Настройки импортированы")}catch(err){console.error(err);toast("Не удалось импортировать")}};
 let guestHtml="";
 async function buildGuest(){await cvEnsure();const msgs=[{type:"cfg",cfg:pubCfg(),vars:vars()},photoMsg(),musMsg(),vidMsg()];const srv=S.endpoint?"<script>window.__SERVER="+JSON.stringify({url:S.endpoint,token:S.token}).replace(/</g,"\\u003c")+"<\/script>":"";const boot="<script>window.__BOOT="+JSON.stringify(msgs).replace(/</g,"\\u003c")+"<\/script>";return INVITE.replace("<script>",()=>srv+boot+"<script>")}
 if($("#gBtn"))$("#gBtn").onclick=async()=>{if(S.format==="card")return pdfBuild();toast("Сборка…",true);guestHtml=await buildGuest();$("#gInfo").textContent=`Файл собран: ${(guestHtml.length/1048576).toFixed(1)} МБ. Редактора и цен в нём нет.`;toast("Готово")};
 if($("#gSh"))$("#gSh").onclick=async()=>{if(S.format==="card")return pdfOut();if(!guestHtml)guestHtml=await buildGuest();$("#gInfo").textContent=`Файл собран: ${(guestHtml.length/1048576).toFixed(1)} МБ. Редактора и цен в нём нет.`;shareFile(S.token+".html","text/html",guestHtml,"Свадебное приглашение")};
-$("#reset").onclick=async()=>{if(!await ask("Вернуть демо-данные в этом заказе и удалить его фото, музыку и видео? Другие заказы не изменятся.","Сбросить"))return;for(const id of idsOf(S))await rmPhoto(id);const keep={id:S.id,token:S.token,responses:S.responses};ORD[cur]=S=Object.assign(DEMO(),keep);fillForm();renderAll();push();sendPhotos();save();toast("Демо-данные восстановлены")};
+$("#reset").onclick=async()=>{if(!await ask("Вернуть демо-данные в этом заказе и удалить его фото, музыку и видео? Другие заказы не изменятся.","Сбросить"))return;for(const id of idsOf(S))await rmPhoto(id);const keep={id:S.id,token:S.token,responses:S.responses,status:S.status,expiresAt:S.expiresAt,firstOpen:S.firstOpen,archived:S.archived,trialMin:S.trialMin,_cloudId:S._cloudId,_cabinetToken:S._cabinetToken,_acc:S._acc};ORD[cur]=S=Object.assign(DEMO(),keep);fillForm();renderAll();push();sendPhotos();save();toast("Демо-данные восстановлены")};
 
 /* ---- orders ---- */
 const STAT={trial:"пробный",active:"активен",off:"отключён"};let showArch=false;
@@ -585,10 +583,10 @@ function renderOrders(){$("#nPlan").innerHTML=Object.entries(PLANS).map(([k,p])=
 function fillTplSel(){const f=$("#nFmt").value,v=$("#nTpl").value;$("#nTpl").innerHTML=allT().filter(t=>t.fmt==="both"||t.fmt===f).map(t=>`<option value="${t.id}">${esc(t.cat)}: ${esc(t.name)}</option>`).join("");if(v)$("#nTpl").value=v}
 $("#nFmt").onchange=fillTplSel;$("#showArch").onchange=e=>{showArch=e.target.checked;renderOrders()};
 $("#newOrd").onclick=()=>{const g=$("#nG").value.trim(),b=$("#nB").value.trim();if(!g||!b)return toast("Укажите имена жениха и невесты");const t=allT().find(x=>x.id===$("#nTpl").value)||BUILTIN[0];
- const o=clean({groom:g,bride:b,format:$("#nFmt").value,plan:$("#nPlan").value,colors:t.colors,fonts:t.fonts,style:t.style,templateName:t.name,footer:`С любовью, ${g} и ${b}`});ORD.push(o);$("#nG").value=$("#nB").value="";go(ORD.length-1);show("main");toast("Заказ создан")};
+ const o=clean({groom:g,bride:b,format:$("#nFmt").value,plan:$("#nPlan").value,colors:t.colors,fonts:t.fonts,style:t.style,templateName:t.name,status:"active",expiresAt:ymd(plus2m()),footer:`С любовью, ${g} и ${b}`});ORD.push(o);$("#nG").value=$("#nB").value="";go(ORD.length-1);show("main");toast("Заказ создан")};
 async function dupOrder(i){const o=JSON.parse(JSON.stringify(ORD[i])),map={};try{for(const id of idsOf(o)){const u=URLS.get(id);if(!u)continue;const n=uid();await DB.put({id:n,blob:d2b(u)});URLS.set(n,u);map[id]=n}}catch(e){return toast("Не удалось скопировать файлы")}
  const m=x=>map[x]||null;o.heroId=m(o.heroId);o.musicId=m(o.musicId);o.videoId=m(o.videoId);o.videoPosterId=m(o.videoPosterId);o.galleryIds=o.galleryIds.map(m).filter(Boolean);o.dressIds=o.dressIds.map(m).filter(Boolean);o.housingIds=o.housingIds.map(m).filter(Boolean);o.extraIds=o.extraIds.map(m).filter(Boolean);o.program.forEach(p=>{p.photoId=m(p.photoId)});o.questions.forEach(q=>{q.optImg=(q.optImg||[]).map(m)});o.heroX.forEach(x=>{x.id=m(x.id)});
- o.id=uid();o.token=tok();o.responses=[];o.status="trial";o.firstOpen=null;o.archived=false;o.created=Date.now();ORD.splice(i+1,0,o);if(i<cur)cur++;save();renderOrders();toast("Копия создана. Ответы и ссылка новые.")}
+ delete o._cloudId;delete o._cabinetToken;delete o._acc;o.mediaMap={};o.canvasMap={};o.id=uid();o.token=tok();o.responses=[];o.status="active";o.expiresAt=ymd(plus2m());o.firstOpen=null;o.archived=false;o.created=Date.now();ORD.splice(i+1,0,o);if(i<cur)cur++;save();renderOrders();toast("Копия создана. Ответы и ссылка новые.")}
 $("#ordList").onclick=async e=>{const b=e.target.closest("[data-o]");if(!b)return;const i=+b.closest(".oc").dataset.i,a=b.dataset.o,o=ORD[i];
  if(a==="open"){go(i);show("main")}else if(a==="arc"){o.archived=!o.archived;save();renderOrders()}else if(a==="dup")await dupOrder(i);
  else if(a==="del"){if(!await ask(`Удалить заказ «${o.groom} и ${o.bride}» вместе с фото и ответами?`,"Удалить"))return;for(const id of idsOf(o))await rmPhoto(id);ORD.splice(i,1);if(!ORD.length)ORD.push(clean(null));if(i<cur)cur--;cur=Math.min(cur,ORD.length-1);go(cur);toast("Заказ удалён")}};
@@ -663,17 +661,17 @@ $("#csv").onclick=()=>{if(!S.responses.length)return toast("Нет ответо�
  shareFile("responses.csv","text/csv","\ufeff"+rows.map(r=>r.map(q).join(";")).join("\r\n"),"Ответы гостей")};
 /* ---- access (local simulation) ---- */
 const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-function accessState(){const now=Date.now();if(S.status==="off")return"disabled";if(S.status==="trial")return S.firstOpen&&now>S.firstOpen+S.trialMin*6e4?"trial_ended":"ok";return S.expiresAt&&now>new Date(S.expiresAt+"T23:59:59").getTime()?"expired":"ok"}
+const plus2m=()=>{const d=new Date();d.setMonth(d.getMonth()+2);return d};
+function accessState(){const now=Date.now();if(S.status==="off")return"disabled";return S.expiresAt&&now>new Date(S.expiresAt+"T23:59:59").getTime()?"expired":"ok"}
 function accInfo(){const l=$("#lnk");if(!l)return;l.value="https://ВАШ-ДОМЕН/i/"+S.token;const st=accessState(),t=S.firstOpen?new Date(S.firstOpen).toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"}):"";
- $("#accInfo").textContent="Сейчас: "+{ok:"доступно гостям",disabled:"отключено",trial_ended:"пробный период завершён",expired:"срок истёк"}[st]+"."+(S.status==="trial"?(S.firstOpen?` Первое открытие в ${t}, пробный период ${S.trialMin} мин.`:" Пробный период начнётся при первом открытии гостем."):"")+(simGuest?" Режим гостя включён.":"")}
+ $("#accInfo").textContent="Сейчас: "+{ok:"доступно гостям",disabled:"отключено",trial_ended:"пробный период завершён",expired:"срок истёк"}[st]+"."+(simGuest?" Режим гостя включён.":"")}
 const act=f=>{f();fillForm();changed();renderOrders()};
 $("#ex6").onclick=()=>act(()=>{const d=new Date();d.setMonth(d.getMonth()+6);S.status="active";S.expiresAt=ymd(d)});
 $("#ex1").onclick=()=>act(()=>{const b=S.expiresAt&&new Date(S.expiresAt)>new Date()?new Date(S.expiresAt+"T12:00:00"):new Date();b.setMonth(b.getMonth()+1);S.status="active";S.expiresAt=ymd(b)});
 $("#exOff").onclick=()=>act(()=>{S.status="off"});
-$("#trialRst").onclick=()=>act(()=>{S.firstOpen=null;S.status="trial"});
 $("#newTok").onclick=async()=>{if(await ask("Создать новую ссылку? Старая перестанет работать.","Создать"))act(()=>{S.token=tok()})};
 $("#cpLnk").onclick=()=>copyText($("#lnk").value);
-$("#simG").onclick=()=>{if(S.status==="trial"&&!S.firstOpen)S.firstOpen=Date.now();simGuest=true;save();push();accInfo();document.body.classList.add("pv")};
+$("#simG").onclick=()=>{simGuest=true;save();push();accInfo();document.body.classList.add("pv")};
 $("#simX").onclick=()=>{simGuest=false;push();accInfo()};
 $$("[data-nt]").forEach(c=>c.onchange=()=>{S.notify[c.dataset.nt]=c.checked;save()});
 $("#p-access").addEventListener("input",e=>{if(e.target.dataset.k==="status"||e.target.dataset.k==="expiresAt"){renderOrders();if(simGuest)push()}});
@@ -1160,14 +1158,19 @@ const statsOpen=$id("openStatsLink");if(statsOpen)statsOpen.onclick=()=>{const v
 function clone(o){return JSON.parse(JSON.stringify(o))}
 function getCanvasStore(){try{return JSON.parse(localStorage.getItem(CVK))||{}}catch(e){return{}}}
 function putCanvasStore(v){try{localStorage.setItem(CVK,JSON.stringify(v))}catch(e){}}
-function packOrder(o){const d=clone(o);delete d._cloudId;delete d._cabinetToken;delete d._starterDemo;d.mediaMap=d.mediaMap||{};d.canvasMap=d.canvasMap||{};d.canvasData=getCanvasStore()[o.id]||d.canvasData||null;return d}
-function orderRow(o){return {id:o._cloudId,token:o.token,couple_names:o.projectName||[o.groom,o.bride].filter(Boolean).join(" и "),format:o.format||"site",plan:o.plan||"basic",status:o.status||"trial",trial_minutes:Number(o.trialMin)||30,first_opened_at:o.firstOpen?(typeof o.firstOpen==="number"?new Date(o.firstOpen).toISOString():o.firstOpen):null,expires_at:o.expiresAt||null,archived:!!o.archived,data:packOrder(o),notes:o.notes||null}}
+function packOrder(o){const d=clone(o);delete d._cloudId;delete d._cabinetToken;delete d._starterDemo;delete d._acc;d.mediaMap=d.mediaMap||{};d.canvasMap=d.canvasMap||{};d.canvasData=getCanvasStore()[o.id]||d.canvasData||null;return d}
+function orderRow(o){return {id:o._cloudId,token:o.token,couple_names:o.projectName||[o.groom,o.bride].filter(Boolean).join(" и "),format:o.format||"site",plan:o.plan||"basic",status:o.status||"active",trial_minutes:Number(o.trialMin)||30,first_opened_at:o.firstOpen?(typeof o.firstOpen==="number"?new Date(o.firstOpen).toISOString():o.firstOpen):null,expires_at:o.expiresAt||null,archived:!!o.archived,data:packOrder(o),notes:o.notes||null}}
+const ACC_FIELDS=["status","trial_minutes","first_opened_at","expires_at","archived"];
+const accKey=o=>JSON.stringify([o.status||"active",Number(o.trialMin)||30,o.firstOpen||null,o.expiresAt||null,!!o.archived]);
+const expIso=v=>/^\d{4}-\d{2}-\d{2}$/.test(v||"")?new Date(v+"T23:59:59").toISOString():(v||null);
 async function ensureCloudOrder(o){
  if(o._cloudId)return o._cloudId;
  o._cloudId=crypto.randomUUID();
  const {data,error}=await sb.from("orders").insert(orderRow(o)).select("id,token,cabinet_token").single();
  if(error){delete o._cloudId;throw error}
- o._cloudId=data.id;o._cabinetToken=data.cabinet_token||null;
+ o._cloudId=data.id;o._cabinetToken=data.cabinet_token||null;o._acc=accKey(o);
+ /* Ссылка приглашения должна совпадать с заказом: срок и блокировка записываются и в таблицу links */
+ if(o.expiresAt){const {error:le}=await sb.from("links").update({blocked:o.status==="off",expires_at:expIso(o.expiresAt)}).eq("order_id",o._cloudId).eq("kind","main");if(le){console.warn("links sync",le);toast("Заказ создан, но срок ссылки не записан: "+(le.message||le.code))}}
  return o._cloudId;
 }
 function mediaTypeFor(id,o,blob){if(id===o.videoId)return"video";if(id===o.musicId)return"music";return"photo"}
@@ -1212,8 +1215,14 @@ async function upsertOrder(o){
  await ensureCloudOrder(o);
  await uploadOrderMedia(o);
  const row=orderRow(o);
+ /* Статус, срок, архив и «первое открытие» принадлежат серверу и панели управления.
+    Редактор отправляет их только если вы сами изменили их в редакторе. */
+ const changed=o._acc!==undefined&&accKey(o)!==o._acc;
+ if(!changed){for(const k of ACC_FIELDS)delete row[k]}else row.expires_at=expIso(o.expiresAt);
  const {error}=await sb.from("orders").upsert(row,{onConflict:"id"});
  if(error)throw error;
+ if(changed){const p={blocked:o.status==="off"};if(row.expires_at)p.expires_at=row.expires_at;
+  const {error:le}=await sb.from("links").update(p).eq("order_id",o._cloudId).eq("kind","main");if(le)throw le;o._acc=accKey(o)}
  statsInfo();
 }
 async function syncOrder(o){
@@ -1245,7 +1254,7 @@ async function loadCloudOrders(){
   const {data:rows,error}=await sb.from("orders").select("id,token,couple_names,format,plan,status,trial_minutes,first_opened_at,expires_at,archived,data,cabinet_token,notes,created_at").order("created_at",{ascending:true});
   if(error)throw error;
   const local=ORD.slice(),cloud=[];
-  for(const row of rows||[]){const raw=row.data&&typeof row.data==="object"?row.data:{};const o=clean(raw);o.id=raw.id||uid();o.token=raw.token||row.token||tok();o.status=row.status||raw.status||"trial";o.trialMin=row.trial_minutes||raw.trialMin||30;o.firstOpen=row.first_opened_at?Date.parse(row.first_opened_at):raw.firstOpen||null;o.expiresAt=row.expires_at||raw.expiresAt||"";o.archived=!!row.archived;o.notes=row.notes??raw.notes??"";o._cloudId=row.id;o._cabinetToken=row.cabinet_token||null;o.mediaMap=raw.mediaMap||{};o.canvasMap=raw.canvasMap||{};o.canvasData=raw.canvasData||null;o.responses=[];hydrateMedia(o);cloud.push(o)}
+  for(const row of rows||[]){const raw=row.data&&typeof row.data==="object"?row.data:{};const o=clean(raw);o.id=raw.id||uid();o.token=raw.token||row.token||tok();o.status=(row.status&&row.status!=="trial"?row.status:"active");o.trialMin=row.trial_minutes||raw.trialMin||30;o.firstOpen=row.first_opened_at?Date.parse(row.first_opened_at):raw.firstOpen||null;o.expiresAt=row.expires_at?String(row.expires_at).slice(0,10):(raw.expiresAt||"");o.archived=!!row.archived;o.notes=row.notes??raw.notes??"";o._cloudId=row.id;o._cabinetToken=row.cabinet_token||null;o._acc=accKey(o);o.mediaMap=raw.mediaMap||{};o.canvasMap=raw.canvasMap||{};o.canvasData=raw.canvasData||null;o.responses=[];hydrateMedia(o);cloud.push(o)}
   if(hadLocalOrders){for(const o of local)if(!cloud.some(x=>x.token===o.token))cloud.push(o)}
   if(!cloud.length){cloud.push(...local);if(!hadLocalOrders)cloud.forEach(o=>o._starterDemo=true)}
   ORD=cloud;cur=Math.max(0,Math.min(cur,ORD.length-1));
@@ -1308,7 +1317,7 @@ function patchGuestBuilder(){
    html=html.slice(0,a)+replacement+html.slice(b);
   }
   const ready="parent.postMessage({type:\"ready\"},\"*\");";
-  const verify=`if(window.__SERVER&&window.__SERVER.supabaseUrl){fetch(window.__SERVER.supabaseUrl+"/rest/v1/rpc/open_invitation",{method:"POST",headers:{apikey:window.__SERVER.anonKey,Authorization:"Bearer "+window.__SERVER.anonJwt,"Content-Type":"application/json"},body:JSON.stringify({p_token:window.__SERVER.token})}).then(r=>r.json()).then(j=>{const st=j&&j.status;if(st==='ok'){gate('ok');return}if(st==='trial_ended'||st==='expired'||st==='disabled'||st==='blocked'){gate(st==='blocked'?'disabled':st);return}gate('disabled');const T=document.getElementById('gt'),P=document.getElementById('gp');if(st==='not_found'||st==='invalid'){T.textContent='Приглашение не найдено';P.textContent='Проверьте ссылку или обратитесь к организатору.'}else{T.textContent='Не удалось проверить доступ';P.textContent='Обновите страницу. Код: '+(st||(j&&(j.code||j.message))||'нет ответа')}}).catch(e=>{gate('disabled');const T=document.getElementById('gt'),P=document.getElementById('gp');T.textContent='Не удалось проверить доступ';P.textContent='Проверьте интернет и обновите страницу. ('+(e&&e.message||'сеть')+')'})}`;
+  const verify=`if(window.__SERVER&&window.__SERVER.supabaseUrl){(function chk(n){fetch(window.__SERVER.supabaseUrl+"/rest/v1/rpc/open_invitation",{method:"POST",headers:{apikey:window.__SERVER.anonKey,Authorization:"Bearer "+window.__SERVER.anonJwt,"Content-Type":"application/json"},body:JSON.stringify({p_token:window.__SERVER.token})}).then(r=>r.json()).then(j=>{const st=j&&j.status;if(st==='ok'){gate('ok');return}if(st==='trial_ended'||st==='expired'||st==='disabled'||st==='blocked'||st==='off'||st==='archived'){gate(st==='blocked'||st==='off'||st==='archived'?'disabled':st);return}if(st==='not_found'||st==='invalid'){gate('disabled');document.getElementById('gt').textContent='Приглашение не найдено';document.getElementById('gp').textContent='Проверьте ссылку или обратитесь к организатору.';return}throw new Error(st||(j&&(j.code||j.message))||'нет ответа')}).catch(e=>{if(n<2){setTimeout(()=>chk(n+1),1500);return}gate('disabled');document.getElementById('gt').textContent='Не удалось проверить доступ';document.getElementById('gp').textContent='Проверьте интернет и обновите страницу.';const b=document.createElement('button');b.className='btn';b.style.marginTop='22px';b.textContent='Обновить';b.onclick=()=>location.reload();document.getElementById('gp').after(b)})})(0)}`;
   html=html.replace(ready,verify+";"+ready);
   return html;
  };
