@@ -261,16 +261,6 @@ body.cvon .fab{display:none}#p-canvas.cvfs .cvdock{position:static;margin:8px 0 
   <section class="panel" id="p-resp"><div id="respSum"></div><div id="respTbl"></div><button id="respClr" type="button"></button><button id="csv" type="button"></button></section>
   <section class="panel" id="p-access"><input id="lnk" readonly><p id="accInfo"></p><button id="cpLnk" type="button"></button><button id="newTok" type="button"></button><button id="ex6" type="button"></button><button id="ex1" type="button"></button><button id="exOff" type="button"></button><button id="simG" type="button"></button><button id="simX" type="button"></button></section>
   <section class="panel" id="p-svc"></section>
-  <div class="box"><h3>4. Ссылки для клиента</h3>
-   <p class="hint" style="margin:0 0 10px">Это отдельная персональная страница с ответами и статистикой именно этой свадьбы. Ссылку передавайте жениху и невесте, не всем гостям.</p>
-   <label class="f"><span>Адрес приложения статистики (указывается один раз)</span><input id="statsBase" inputmode="url" autocapitalize="none" placeholder="https://ваш-сайт-статистики.pages.dev"></label>
-   <button class="btn g" id="saveStatsBase" type="button">Сохранить адрес приложения</button>
-   <label class="f"><span>Персональная ссылка этой пары</span><input id="statsLink" readonly placeholder="Появится после сохранения заказа и настройки приложения"></label>
-   <div class="row" style="margin-top:0"><button class="btn g" id="copyStatsLink" type="button">Копировать ссылку статистики</button><button class="btn g" id="openStatsLink" type="button">Открыть сайт пары</button></div>
-   <label class="f"><span>Ссылка на приглашение (для гостей)</span><input id="inviteLinkOut" readonly placeholder="Появится после публикации приглашения"></label>
-   <div class="row" style="margin-top:0"><button class="btn g" id="copyClientMsg" type="button">Копировать сообщение клиенту</button></div>
-   <p class="hint" id="statsInfo" style="margin:10px 0 0"></p>
-  </div>
   <div class="box"><h3>Хранилище и фото</h3><p class="hint" id="diag" style="margin:0 0 10px">Нажмите «Проверить», чтобы увидеть, где браузер хранит фото.</p><button class="btn g" id="diagBtn">Проверить</button></div>
   </div>
 
@@ -302,6 +292,16 @@ body.cvon .fab{display:none}#p-canvas.cvfs .cvdock{position:static;margin:8px 0 
    <label class="f"><span>Публичная ссылка для всех приглашённых</span><input data-k="publicUrl" inputmode="url" autocapitalize="none" placeholder="Появится после публикации" readonly></label>
    <div class="row" style="margin-top:0"><button class="btn g" id="cpPub">Копировать ссылку</button><button class="btn g" id="openPub" type="button">Открыть приглашение</button></div>
    <p class="hint" id="pubInfo" style="margin:10px 0 0"></p>
+  </div>
+  <div class="box"><h3>4. Ссылка на статистику для клиента</h3>
+   <p class="hint" style="margin:0 0 10px">Это отдельная персональная страница с ответами и статистикой именно этой свадьбы. Ссылку передавайте жениху и невесте, не всем гостям.</p>
+   <label class="f"><span>Адрес приложения статистики (указывается один раз)</span><input id="statsBase" inputmode="url" autocapitalize="none" placeholder="https://ваш-сайт-статистики.pages.dev"></label>
+   <button class="btn g" id="saveStatsBase" type="button">Сохранить адрес приложения</button>
+   <label class="f"><span>Персональная ссылка этой пары</span><input id="statsLink" readonly placeholder="Появится после сохранения заказа и настройки приложения"></label>
+   <div class="row" style="margin-top:0"><button class="btn g" id="copyStatsLink" type="button">Копировать ссылку статистики</button><button class="btn g" id="openStatsLink" type="button">Открыть статистику</button></div>
+   <label class="f"><span>Ссылка на приглашение (для гостей)</span><input id="inviteLinkOut" readonly placeholder="Появится после публикации приглашения"></label>
+   <div class="row" style="margin-top:0"><button class="btn g" id="copyClientMsg" type="button">Копировать сообщение клиенту</button></div>
+   <p class="hint" id="statsInfo" style="margin:10px 0 0"></p>
   </div>
  </section>
 
@@ -487,7 +487,7 @@ $("#tabs").onclick=e=>{const b=e.target.closest("button");if(b)show(b.dataset.t)
 /* ---- fields ---- */
 $$("[data-k]").forEach(el=>el.addEventListener("input",()=>{S[el.dataset.k]=el.value; if(el.dataset.k==="publicSlug")el.dataset.manual="1"; if(el.dataset.k==="projectName"){const sl=$("[data-k=publicSlug]");if(sl&&!sl.dataset.manual){S.publicSlug=uniqueSlug(slugifyWedding(el.value));sl.value=S.publicSlug}} changed()}));
 function slugifyWedding(v){const map={а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ф:"f",х:"h",ц:"ts",ч:"ch",ш:"sh",щ:"sch",ъ:"",ы:"y",ь:"",э:"e",ю:"yu",я:"ya"};return String(v||"").toLowerCase().split("").map(c=>map[c]??c).join("").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,70)}
-const fillForm=()=>$$("[data-k]").forEach(el=>el.value=S[el.dataset.k]??"");
+const fillForm=()=>{$$("[data-k]").forEach(el=>el.value=S[el.dataset.k]??"");try{if(window.wsStatsInfo)window.wsStatsInfo()}catch(e){}};
 
 /* ---- photos ---- */
 const MAXL={galleryIds:12,dressIds:8,housingIds:12,extraIds:12};let tgt=null;
@@ -1158,7 +1158,7 @@ function authMessage(s,ok=false){authMsg.textContent=s;authMsg.classList.toggle(
 function showAuth(s){authBox.classList.add("on");document.body.classList.add("ws-locked");pill.style.display="none";if(s)authMessage(s)}
 function hideAuth(){authBox.classList.remove("on");document.body.classList.remove("ws-locked");pill.style.display="flex"}
 function cloudStatus(s){pillText.textContent=s;pill.title=s}
-function statsInfo(){const baseInput=$id("statsBase"),out=$id("statsLink"),info=$id("statsInfo");if(!baseInput||!out)return;const base=localStorage.getItem("ws-guest-stats-base")||STATS_BASE_DEFAULT;if(document.activeElement!==baseInput)baseInput.value=base;if(!S||!S._cabinetToken){out.value="Сначала сохраните заказ в облаке";if(info)info.textContent="Токен статистики появится после первой синхронизации заказа.";return}if(!base){out.value="Укажите адрес гостевого приложения";if(info)info.textContent="Вставьте URL опубликованного guest-stats.html и сохраните его.";return}try{const u=new URL(base);u.searchParams.set("t",S._cabinetToken);out.value=u.href;if(info)info.textContent="Персональная ссылка статистики для этого заказа. Не публикуйте её в открытом доступе."}catch(e){out.value="Некорректный адрес гостевого приложения"}}
+function statsInfo(){const baseInput=$id("statsBase"),out=$id("statsLink"),info=$id("statsInfo");if(!baseInput||!out)return;const base=localStorage.getItem("ws-guest-stats-base")||STATS_BASE_DEFAULT;if(document.activeElement!==baseInput)baseInput.value=base;if(S&&S._cloudId&&!S._cabinetToken&&!S._tokBusy&&sb){S._tokBusy=true;sb.from("orders").select("cabinet_token").eq("id",S._cloudId).maybeSingle().then(r=>{S._tokBusy=false;if(r&&r.data&&r.data.cabinet_token){S._cabinetToken=r.data.cabinet_token;statsInfo();const i=$id("inviteLinkOut");if(i)i.value=(S&&S.publicUrl)||""}}).catch(()=>{S._tokBusy=false})}if(!S||!S._cabinetToken){out.value="Сначала сохраните заказ в облаке";if(info)info.textContent="Токен статистики появится после первой синхронизации заказа.";return}if(!base){out.value="Укажите адрес гостевого приложения";if(info)info.textContent="Вставьте URL опубликованного guest-stats.html и сохраните его.";return}try{const u=new URL(base);u.searchParams.set("t",S._cabinetToken);out.value=u.href;if(info)info.textContent="Персональная ссылка статистики для этого заказа. Не публикуйте её в открытом доступе."}catch(e){out.value="Некорректный адрес гостевого приложения"}}
 window.wsStatsInfo=function(){statsInfo();const i=$id("inviteLinkOut");if(i)i.value=(S&&S.publicUrl)||""};
 const cm=$id("copyClientMsg");if(cm)cm.onclick=()=>{const st=$id("statsLink").value,inv=(S&&S.publicUrl)||"";if(!st.startsWith("https://"))return toast("Сначала сохраните заказ и настройте ссылку статистики");const exp=S.expiresAt?new Date(S.expiresAt+"T23:59:59").toLocaleDateString("ru-RU",{day:"2-digit",month:"long",year:"numeric"}):"";copyText(["Здравствуйте"+(S.clientName?", "+S.clientName:"")+"!",inv?"Приглашение для гостей: "+inv:"","Статистика ответов гостей: "+st,exp?"Ссылка действует до "+exp+". Продлить можно через Telegram: @poleteliiiiiiiiiii.":""].filter(Boolean).join("\n"))};
 const statsSave=$id("saveStatsBase");if(statsSave)statsSave.onclick=()=>{const v=$id("statsBase").value.trim();if(v&&!/^https:\/\//i.test(v))return toast("Нужен полный HTTPS-адрес");try{if(v)new URL(v)}catch(e){return toast("Некорректный адрес")};localStorage.setItem("ws-guest-stats-base",v);statsInfo();toast("Адрес гостевого приложения сохранён")};
